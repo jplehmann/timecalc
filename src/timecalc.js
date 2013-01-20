@@ -7,8 +7,13 @@ $( document ).ready(function() {
   // when leaving a cell, update the totals
   $("input").blur(function(event) {
     var $curRow = $(event.target).parents('tr');
-    updateRow($curRow);
+    var rowTotal = updateRow($curRow);
     updateTotalColumn();
+    console.log("row total " + rowTotal);
+    // if the last row is filled out, add another row
+    if (rowTotal !== "" && lastRow().get(0) === $curRow.get(0)) {
+      addRow();
+    }
   });
   // clicking on an input will select all so as to replace
   // the value by default
@@ -26,8 +31,26 @@ $( document ).ready(function() {
 });
 
 /**
+ * Returns the JQuery object for last 'day' row.
+ */
+function lastRow() {
+  return $('#main_table tr.day').last();
+}
+
+/**
+ * Creates a new row by cloning the last row and clearing it.
+ */
+function addRow() {
+  var $newRow = lastRow().clone(true).insertAfter(lastRow());
+  // reset values
+  $newRow.find('input').val("");
+  $newRow.find('div.day.total').text("");
+}
+
+/**
  * Recompute hours for a row.
  * @param $curRow is the 'tr'
+ * @return the total
  */
 function updateRow($curRow) {
   var totalTime = computeRow($curRow);
@@ -43,6 +66,7 @@ function updateRow($curRow) {
   else {
     $total.removeClass('error');
   }
+  return totalTime;
 }
 
 /**
@@ -102,7 +126,6 @@ function parseTime(val, refTime) {
     meridiem = true;
   }
   // let moment.js figure out what they said
-  console.log("val is " + val);
   var m = moment(val, "h:mma")
   if (!m) {
     return undefined;
@@ -118,7 +141,7 @@ function parseTime(val, refTime) {
     return undefined;
   }
   // if this time is earlier than our reference time, make it PM if not already
-  console.log(meridiem + "," + fval + "," + refTime);
+  //console.log(meridiem + "," + fval + "," + refTime);
   if (!meridiem && fval < refTime) {
     if (m.hours() < 12) {
       fval += 12;

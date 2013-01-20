@@ -12,6 +12,10 @@ td {
   /*border: 1px solid;  */
 }
 
+.header {
+  background: #DDF;
+}
+
 input {
   margin: 0 5px 0 5px;
   text-align: right;
@@ -24,5 +28,9 @@ div.day.total, div.week.total {
 
 .error {
   color: #F00;
+}
+
+.instructions {
+  font-size: 11px;
 }
 

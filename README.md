@@ -29,14 +29,14 @@ x replace the time with the normalized time so there is no confusion on what was
 x limit the precision on any number to 2 decimal places
 x BDD spec tests with Jasmine
 x should return undefined for junk not 12am
+x When visiting the page, should be able to see directions: …
+x When visiting the page, should be one row displayed at first
+x After filling out the last valid row, another is added
 
 
 Todo
 ----
-* When visiting the page, should be able to see directions: …
-* When visiting the page, should be one row displayed at first
-* After entering a valid row, another is added
-* Should be able to click a button to clear to start over
+* Should be able to click a button to clear to start over (reload?)
 
 * Should allow checkbox to round to nearest .25
 
