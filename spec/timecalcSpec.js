@@ -23,7 +23,41 @@ describe("Time Parser", function() {
     it("should infer with reference time", function() {
         expect(parseTime("7", "9")).toEqual([19, "7:00pm"]);
     });
+    it("should return undefined for junk", function() {
+        expect(parseTime("asdf")).toBeUndefined();
+    });
 });
 
+describe("Time Input", function() {
+    // is there a better way than having to create my own object
+    // with a stub function?
+    var mockInput = { val : function() { } }; 
 
+    it("should be set with normalized value", function() {
+        spyOn(mockInput, 'val').andReturn("8");
+        expect(updateInputIfValid(mockInput)).toEqual(8);
+        expect(mockInput.val).toHaveBeenCalledWith("8:00am");
+    });
+    it("when given ref time should be set with normalized value", function() {
+        spyOn(mockInput, 'val').andReturn("8");
+        expect(updateInputIfValid(mockInput, 9)).toEqual(20);
+        expect(mockInput.val).toHaveBeenCalledWith("8:00pm");
+    });
+    it("when given meridiem should be set with normalized value", function() {
+        spyOn(mockInput, 'val').andReturn("7p");
+        expect(updateInputIfValid(mockInput)).toEqual(19);
+        expect(mockInput.val).toHaveBeenCalledWith("7:00pm");
+    });
+    it("when given junk should be unchanged", function() {
+        spyOn(mockInput, 'val').andReturn("asdf");
+        expect(updateInputIfValid(mockInput)).toBeUndefined();
+        expect(mockInput.val.calls.length).toEqual(1);
+    });
+});
+
+describe("Sum Function", function() {
+    it("should add string times", function() {
+        expect(addTimes(["1", "2.1", ""])).toEqual(3.1);
+    });
+});
 

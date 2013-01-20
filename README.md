@@ -27,23 +27,27 @@ x out time less than in time should result in error; highlighting in red
 x if out is less than in, infer PM unless merdiem was explicitly stated
 x replace the time with the normalized time so there is no confusion on what was selected
 x limit the precision on any number to 2 decimal places
+x BDD spec tests with Jasmine
+x should return undefined for junk not 12am
 
 
 Todo
 ----
-Should allow checkbox to round to nearest .25
-When visiting the page, should be able to see directions: …
-When visiting the page, should be one row displayed at first
-After entering a valid row, another is added
-Should be able to click a button to clear to start over
+* When visiting the page, should be able to see directions: …
+* When visiting the page, should be one row displayed at first
+* After entering a valid row, another is added
+* Should be able to click a button to clear to start over
+
+* Should allow checkbox to round to nearest .25
 
 Misc
 ----
-BDD spec tests with Jasmine
+More cool UI interactions
+Style it
 Deploy to host environment (Heroku)
-Style the app
+Github for feedback -- how to allow comments?
+BDD-style acceptance testing
 Try knockout.js for UI interactions
-Github
 
 
 Low Priority

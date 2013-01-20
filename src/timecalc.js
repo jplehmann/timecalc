@@ -2,7 +2,7 @@
 var PRECISION = 2;
 
 $( document ).ready(function() {
-  // autofocus on the first input
+  // auto-focus on the first input
   $('input:visible:first').first().focus();
   // when leaving a cell, update the totals
   $("input").blur(function(event) {
@@ -52,20 +52,13 @@ function updateRow($curRow) {
 function computeRow($curRow) {
   // get A B and C, and parse
   var $inputs = $curRow.find('input');
-  var timeInArr = parseTime($inputs.eq(0).val());
-  if (timeInArr === undefined) {
+
+  var timeIn = updateInputIfValid($inputs.eq(0));
+  var timeOut = updateInputIfValid($inputs.eq(1), timeIn);
+  if (timeIn === undefined || timeOut === undefined) {
     return undefined;
-  } else {
-    var timeIn = timeInArr[0];
-    $inputs.eq(0).val(timeInArr[1]);
   }
-  var timeOutArr = parseTime($inputs.eq(1).val(), timeIn);
-  if (timeOutArr === undefined) {
-    return undefined;
-  } else {
-    var timeOut = timeOutArr[0];
-    $inputs.eq(1).val(timeOutArr[1]);
-  }
+
   var breakLen = parseFloat($inputs.eq(2).val()) || 0;
   // clear out the break field if set to 0 so it's clear
   // that we didn't use it
@@ -74,6 +67,22 @@ function computeRow($curRow) {
   }
   //console.log("ti: " + timeIn + ", to: " + timeOut);
   return timeOut-timeIn-breakLen;
+}
+
+/**
+ * Parses the time then updates the field with how it was interpreted,
+ * if it was able to be parsed.
+ * @return undefined if not valid input.
+ */
+function updateInputIfValid($input, refTime) {
+  var timeArr = parseTime($input.val(), refTime);
+  if (timeArr === undefined) {
+    return undefined;
+  } else {
+    var time = timeArr[0];
+    $input.val(timeArr[1]);
+  }
+  return timeArr[0];
 }
 
 /**
@@ -86,7 +95,7 @@ function computeRow($curRow) {
  */
 function parseTime(val, refTime) {
   // doesn't parse 2p correctly so add a 'm' if we detect this
-  var meridiem = val && /[a|p]m/i.test(val);
+  var meridiem = val && /[a|p]m$/i.test(val);
   if (val.length > 0 && 
       (val[val.length-1] === 'p' || val[val.length-1] === 'a')) {
     val += "m";
@@ -98,12 +107,18 @@ function parseTime(val, refTime) {
   if (!m) {
     return undefined;
   }
+  // if we got 0 hours as a parsed result, but they didn't have a 12, then they
+  // just entered some junk
+  if (m.hours() === 0 && !/12/.test(val)) {
+    return undefined;
+  }
   // hours comes back in 0-23 range so it's already "military" time
   var fval = m.hours() + m.minutes()/60.0;
   if (!fval && fval !== 0) {
     return undefined;
   }
   // if this time is earlier than our reference time, make it PM if not already
+  console.log(meridiem + "," + fval + "," + refTime);
   if (!meridiem && fval < refTime) {
     if (m.hours() < 12) {
       fval += 12;
