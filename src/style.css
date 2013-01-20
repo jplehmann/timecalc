@@ -1,0 +1,24 @@
+
+body {
+}
+
+table {
+  /* center the table */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+td {
+  /*border: 1px solid;  */
+}
+
+input {
+  margin: 0 5px 0 5px;
+  text-align: right;
+  width: 50px;
+}
+
+div.day.total, div.week.total {
+  text-align: right;
+}
+
