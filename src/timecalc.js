@@ -3,13 +3,20 @@ var PRECISION = 2;
 
 $( document ).ready(function() {
   // auto-focus on the first input
-  $('input:visible:first').first().focus();
+  function clearAndInit() {
+    $('input:visible:first').first().focus();
+    // XXX: does each return objects?  how can i wrap them
+    $('#main_table tr.day').each(function(i, el) {
+      clearRow(el); 
+    });
+    updateTotalColumn();
+  };
+  clearAndInit();
   // when leaving a cell, update the totals
   $("input").blur(function(event) {
     var $curRow = $(event.target).parents('tr');
     var rowTotal = updateRow($curRow);
     updateTotalColumn();
-    console.log("row total " + rowTotal);
     // if the last row is filled out, add another row
     if (rowTotal !== "" && lastRow().get(0) === $curRow.get(0)) {
       addRow();
@@ -28,6 +35,14 @@ $( document ).ready(function() {
       $next.focus();
     }
   });
+  // functionality for clear button
+  $('td.clear_button').click(function(event) {
+    //location.reload();
+    clearAndInit();
+  });
+  // add a couple extra rows in the beginning to have 3 total
+  addRow();
+  addRow();
 });
 
 /**
@@ -42,9 +57,15 @@ function lastRow() {
  */
 function addRow() {
   var $newRow = lastRow().clone(true).insertAfter(lastRow());
-  // reset values
-  $newRow.find('input').val("");
-  $newRow.find('div.day.total').text("");
+  clearRow($newRow.get());
+}
+
+/**
+ * Takes a row object (not selector) and reset values.
+ */
+function clearRow(curRow) {
+  $(curRow).find('input').val("");
+  $(curRow).find('div.day.total').text("");
 }
 
 /**

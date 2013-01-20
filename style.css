@@ -26,6 +26,15 @@ div.day.total, div.week.total {
   text-align: right;
 }
 
+td.clear_button {
+  text-align: center;
+}
+
+td.clear_button input {
+  text-align: center;
+  width: 50px;
+}
+
 .error {
   color: #F00;
 }
