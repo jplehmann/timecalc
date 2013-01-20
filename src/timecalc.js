@@ -52,10 +52,19 @@ function updateRow($curRow) {
 function computeRow($curRow) {
   // get A B and C, and parse
   var $inputs = $curRow.find('input');
-  var timeIn = parseTime($inputs.eq(0));
-  var timeOut = parseTime($inputs.eq(1), timeIn);
-  if (timeIn === undefined || timeOut === undefined) {
+  var timeInArr = parseTime($inputs.eq(0).val());
+  if (timeInArr === undefined) {
     return undefined;
+  } else {
+    var timeIn = timeInArr[0];
+    $inputs.eq(0).val(timeInArr[1]);
+  }
+  var timeOutArr = parseTime($inputs.eq(1).val(), timeIn);
+  if (timeOutArr === undefined) {
+    return undefined;
+  } else {
+    var timeOut = timeOutArr[0];
+    $inputs.eq(1).val(timeOutArr[1]);
   }
   var breakLen = parseFloat($inputs.eq(2).val()) || 0;
   // clear out the break field if set to 0 so it's clear
@@ -69,13 +78,13 @@ function computeRow($curRow) {
 
 /**
  * Convert this input's value to military time with decimal
- * minute value else return undefined.
- * e.g. 2:45pm = 14.75
- * try to parse: 2, 2pm, 2:15, 2:15pm
+ * minute value.
+ *   e.g. 2, 2pm, 2:15, 2:15pm
  * @param refTime reference time, assumed to be earlier, used for inference
+ * @return undefined if not understood else an array with the time
+ *   computed and a string showing how we interpreted it
  */
-function parseTime($input, refTime) {
-  var val = $input.val();
+function parseTime(val, refTime) {
   // doesn't parse 2p correctly so add a 'm' if we detect this
   var meridiem = val && /[a|p]m/i.test(val);
   if (val.length > 0 && 
@@ -84,6 +93,7 @@ function parseTime($input, refTime) {
     meridiem = true;
   }
   // let moment.js figure out what they said
+  console.log("val is " + val);
   var m = moment(val, "h:mma")
   if (!m) {
     return undefined;
@@ -100,10 +110,9 @@ function parseTime($input, refTime) {
       m.hours(m.hours()+12);
     }
   }
-  // update the field with how we understood the value
-  // TODO: pass this back to caller instead
-  $input.val(m.format("h:mma"));
-  return fval;
+  // pass back the interpreted value, how we understood it 
+  var interpVal = m.format("h:mma");
+  return [fval, interpVal];
 }
 
 /**

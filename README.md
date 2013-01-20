@@ -1,10 +1,15 @@
 TimeCalc
 ========
-TODO: describe purpose
+A simple timesheet calculator for adding up hours worked in a week.  I designed this to have a small app to tinker with JavaScript and related technologies.
 
 
 Features
 --------
+
+
+
+Stories
+-------
 x should display 5 rows with 3 columns
 x should label rows: day 1, day 2, ...
 x should display 3 column headers: Time In, Time Out, Break Length
@@ -31,12 +36,18 @@ When visiting the page, should be able to see directions: …
 When visiting the page, should be one row displayed at first
 After entering a valid row, another is added
 Should be able to click a button to clear to start over
-should style the app (cf todos)
-Need to use Jasmine
-Need to deploy
-Need to do more fancy UI interactions -- hiding stuff
-Put on github?
 
+Misc
+----
+BDD spec tests with Jasmine
+Deploy to host environment (Heroku)
+Style the app
+Try knockout.js for UI interactions
+Github
+
+
+Low Priority
+------------
 Should allow times without punctuation
 
 
