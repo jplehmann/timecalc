@@ -22,3 +22,7 @@ div.day.total, div.week.total {
   text-align: right;
 }
 
+.error {
+  color: #F00;
+}
+
