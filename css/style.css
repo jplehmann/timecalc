@@ -1,14 +1,11 @@
 
 body {
-  margin: 10px;
-  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 table {
   /* center the table */
   margin-left: auto;
   margin-right: auto;
-  margin: 10px;
 }
 
 td {

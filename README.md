@@ -32,22 +32,28 @@ x should return undefined for junk not 12am
 x When visiting the page, should be able to see directions: …
 x When visiting the page, should be one row displayed at first
 x After filling out the last valid row, another is added
-
+x Should be able to click a button to clear to start over (reload?)
 
 Todo
 ----
-* Should be able to click a button to clear to start over (reload?)
 
 * Should allow checkbox to round to nearest .25
+* Style it
+  * different color rows?
+  * tool tips on headers with help
+  * prettier buttons
 
 Misc
 ----
-More cool UI interactions
-Style it
 Deploy to host environment (Heroku)
+HTML & CSS validator
+JSLint
 Github for feedback -- how to allow comments?
-BDD-style acceptance testing
-Try knockout.js for UI interactions
+
+Cucumber BDD-style acceptance testing
+Knockout.js for UI interactions
+Mustache templating
+CSS with LESS
 
 
 Low Priority
