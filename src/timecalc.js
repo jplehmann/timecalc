@@ -1,18 +1,37 @@
 
-var PRECISION = 2;
+var HOUR_PRECISION = 2;
 
-$( document ).ready(function() {
-  // auto-focus on the first input
-  function clearAndInit() {
-    $('input:visible:first').first().focus();
-    // XXX: does each return objects?  how can i wrap them
-    $('#main_table tr.day').each(function(i, el) {
-      clearRow(el); 
-    });
-    updateTotalColumn();
-  };
+/**
+ * Setup.
+ */
+$(document).ready(function() {
   clearAndInit();
-  // when leaving a cell, update the totals
+  updateTotalsOnBlur();
+  selectAllOnClick();
+  enterAdvancesField();
+  clearButton();
+  // add a couple extra rows in the beginning to have 3 total
+  addRow();
+  addRow();
+});
+
+/** 
+ * For initializing and/or clearing the table
+ */
+function clearAndInit() {
+  // auto-focus on the first input
+  $('input:visible:first').first().focus();
+  // XXX: does each return objects?  how can i wrap them
+  $('#main_table tr.day').each(function(i, el) {
+    clearRow(el); 
+  });
+  updateTotalColumn();
+};
+
+/** 
+ * When leaving a cell, update the totals
+ */
+function updateTotalsOnBlur() {
   $("input").blur(function(event) {
     var $curRow = $(event.target).parents('tr');
     var rowTotal = updateRow($curRow);
@@ -22,12 +41,22 @@ $( document ).ready(function() {
       addRow();
     }
   });
-  // clicking on an input will select all so as to replace
-  // the value by default
+}
+
+/**
+ * Clicking on an input will select all so as to replace
+ * the value by default
+ */
+function selectAllOnClick() {
   $('input').click(function(){
     $(this).select();
   });
-  // "enter" should go to the next input field like tab
+}
+
+/** 
+ * "Enter" should go to the next input field like tab
+ */
+function enterAdvancesField() {
   $("input").bind('keypress', function(event) {
     if (event.keyCode === 13) {
       var $set = $('input');
@@ -35,15 +64,17 @@ $( document ).ready(function() {
       $next.focus();
     }
   });
-  // functionality for clear button
+}
+
+/** 
+ * Setup clear button action
+ */
+function clearButton() {
   $('td.clear_button').click(function(event) {
     //location.reload();
     clearAndInit();
   });
-  // add a couple extra rows in the beginning to have 3 total
-  addRow();
-  addRow();
-});
+}
 
 /**
  * Returns the JQuery object for last 'day' row.
@@ -78,7 +109,7 @@ function updateRow($curRow) {
   if (totalTime === undefined) { 
     totalTime = ""; 
   } else {
-    totalTime = totalTime.toFixed(PRECISION);
+    totalTime = totalTime.toFixed(HOUR_PRECISION);
   }
   $total = $curRow.find("div.day.total").text(totalTime)
   if (totalTime < 0) {
@@ -183,7 +214,7 @@ function updateTotalColumn() {
     return $(el).text();
   }).get();
   var total = addTimes(arr);
-  $('div.week.total').text(total.toFixed(PRECISION));
+  $('div.week.total').text(total.toFixed(HOUR_PRECISION));
 };
 
 /**
