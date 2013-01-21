@@ -33,6 +33,7 @@ x When visiting the page, should be able to see directions: …
 x When visiting the page, should be one row displayed at first
 x After filling out the last valid row, another is added
 x Should be able to click a button to clear to start over (reload?)
+x Deploy to host environment (Heroku)
 
 Todo
 ----
@@ -45,7 +46,7 @@ Todo
 
 Misc
 ----
-Deploy to host environment (Heroku)
+Switch to using Web Hosted JS files? for jquery?
 HTML & CSS validator
 JSLint
 Github for feedback -- how to allow comments?
