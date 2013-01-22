@@ -44,11 +44,17 @@ Todo
   * tool tips on headers with help
   * prettier buttons
 
+clear shoudl clear warnings!!
 header
 bolding
 input fields
 all margins
 
+add tooltips?
+
+o consider using input type=time, number
+o change colors -- highlight
+should i have used tables, and nested tables?
 
 Misc
 ----

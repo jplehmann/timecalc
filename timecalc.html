@@ -10,26 +10,28 @@
 <body>
       <h1 align="center">Time Sheet Calculator</h1>
   <table><tr><td>
-    <table id="main_table" class="table table-bordered">
+    <table id="main_table" class="table table-bordered table-hover">
         <tr class="header">
           <th>Time In</th>
           <th>Time Out</th>
           <th>Break</th>
           <th>Hours</th>
         </tr>
-        <tr class="day">
-            <td> <input name="timeStart"></td>
-            <td> <input name="timeEnd"></td>
-            <td> <input name="breakTime"></td>
-            <td> <div class="day total"></div></td>
-        </tr>
+        <tbody>
+          <tr class="day">
+              <td> <input name="timeStart"></td>
+              <td> <input name="timeEnd"></td>
+              <td> <input name="breakTime"></td>
+              <td> <div class="day total"></div></td>
+          </tr>
+        </tbody>
         <tr class="total">
             <td class="clear_button" colspan=1>
-              <input type="button" value="clear"></input>
+              <input type="button" class="btn-small btn" value="clear"></input>
             </td>
-            <td class="button" colspan=1>
+            <td>
             </td>
-            <td align=right>Total</td>
+            <td class="total-label">Total</td>
             <td>
                 <div class="week total">0</div>
             </td>
@@ -38,15 +40,17 @@
   </td></tr></table>
 
     <p>
-    <table>
+    <table class='instructions'>
     <tr>
-    <td class='instructions'>
+    <td >
+      <h4>Tips:</h4>
       <small>
-      <p>
-      <strong>Time In/Out</strong> should be a time of the day ("9am", "8:15p").
-      <p> <strong>Break</strong> should be a duration in hours (e.g. "1", "0.25").
-      <p> Both tab or enter advances to the next field.
-      <p> Additional rows are added automatically as necessary.
+      <ul>
+        <li><strong>Time In/Out</strong> should be time of day ("9am", "8:15p").
+        <li><strong>Break</strong> should be a duration in hours (e.g. "1", "0.25").
+        <li> Both tab or enter advances to the next field.
+        <li> Additional rows are added automatically as necessary.
+      </ul>
       </small>
     </td>
     </tr>

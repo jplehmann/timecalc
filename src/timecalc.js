@@ -114,10 +114,10 @@ function updateRow($curRow) {
   }
   $total = $curRow.find("div.day.total").text(totalTime)
   if (totalTime < 0) {
-    $total.addClass('error');
+    $curRow.addClass('error');
   }
   else {
-    $total.removeClass('error');
+    $curRow.removeClass('error');
   }
   return totalTime;
 }

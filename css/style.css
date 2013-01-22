@@ -14,12 +14,13 @@ table {
 
 #main_table {
   background: #FFD;
+  margin-top: 15px;
 }
 
 /* header */
 .header {
   /* blue header background */
-  background: #CDF;
+  background: #DDD;
 }
 
 .header th {
@@ -49,9 +50,14 @@ div.day.total, div.week.total {
   width: 65px;
 }
 
+td.total-label {
+  padding-right: 15px;
+  text-align: right;
+}
+
 /* Clear button */
 td.clear_button {
-  /*text-align: center; */
+  text-align: center; 
 }
 
 td.clear_button input {
@@ -61,13 +67,16 @@ td.clear_button input {
   */
 }
 
+/*
 .error {
   color: #F00;
 }
+*/
 
-.instructions {
+table.instructions {
   position: relative;
   top: 10px;
+  left: 5px;
 }
 
 .instructions p {
