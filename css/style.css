@@ -1,10 +1,4 @@
 
-body,table,tr,td,div {
-  /*font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin: 10px;
-  padding: 1px;*/
-}
-
 /* Table elements */
 table {
   margin-left: auto;
@@ -13,6 +7,7 @@ table {
 }
 
 #main_table {
+  /* yellow background */
   background: #FFD;
   margin-top: 5px;
 }
@@ -32,12 +27,6 @@ td {
   border: 0px solid; 
   /*margin-bottom: 10px; */
 }
-
-/*
-td:first-child {
-  padding-top: 50px;
-}
-*/
 
 input {
   /*margin: 0 5px 0 5px;*/
@@ -59,19 +48,6 @@ td.total-label {
 td.clear_button {
   text-align: center; 
 }
-
-td.clear_button input {
-  /*
-  text-align: center;
-  width: 50px;
-  */
-}
-
-/*
-.error {
-  color: #F00;
-}
-*/
 
 table.instructions {
   position: relative;
