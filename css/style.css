@@ -12,10 +12,14 @@ table {
   width: 380px;
 }
 
+#main_table {
+  background: #FFD;
+}
+
 /* header */
 .header {
   /* blue header background */
-  background: #DDF;
+  background: #CDF;
 }
 
 .header th {
@@ -63,6 +67,10 @@ td.clear_button input {
 
 .instructions {
   position: relative;
-  top: 30px;
+  top: 10px;
+}
+
+.instructions p {
+  margin-bottom: 3px;
 }
 
