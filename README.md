@@ -55,6 +55,7 @@ add tooltips?
 o consider using input type=time, number
 o change colors -- highlight
 should i have used tables, and nested tables?
+how to properly center the h1
 
 Misc
 ----
