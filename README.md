@@ -44,6 +44,12 @@ Todo
   * tool tips on headers with help
   * prettier buttons
 
+header
+bolding
+input fields
+all margins
+
+
 Misc
 ----
 Switch to using Web Hosted JS files? for jquery?

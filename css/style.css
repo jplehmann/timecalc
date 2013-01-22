@@ -1,38 +1,60 @@
 
-body {
+body,table,tr,td,div {
+  /*font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 10px;
+  padding: 1px;*/
 }
 
+/* Table elements */
 table {
-  /* center the table */
   margin-left: auto;
   margin-right: auto;
+  width: 380px;
 }
 
-td {
-  /*border: 1px solid;  */
-}
-
+/* header */
 .header {
+  /* blue header background */
   background: #DDF;
 }
 
+.header th {
+  /* center header labels */
+  text-align: center;
+}
+
+td {
+  border: 0px solid; 
+  /*margin-bottom: 10px; */
+}
+
+/*
+td:first-child {
+  padding-top: 50px;
+}
+*/
+
 input {
-  margin: 0 5px 0 5px;
-  text-align: right;
-  width: 75px;
+  /*margin: 0 5px 0 5px;*/
+  text-align: right; 
+  width: 75px; 
 }
 
 div.day.total, div.week.total {
   text-align: right;
+  width: 65px;
 }
 
+/* Clear button */
 td.clear_button {
-  text-align: center;
+  /*text-align: center; */
 }
 
 td.clear_button input {
+  /*
   text-align: center;
   width: 50px;
+  */
 }
 
 .error {
@@ -40,6 +62,7 @@ td.clear_button input {
 }
 
 .instructions {
-  font-size: 11px;
+  position: relative;
+  top: 30px;
 }
 

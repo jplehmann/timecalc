@@ -33,8 +33,9 @@ function clearAndInit() {
  */
 function updateTotalsOnBlur() {
   $("input").blur(function(event) {
-    var $curRow = $(event.target).parents('tr');
+    var $curRow = $(event.target).parents('tr').first();
     var rowTotal = updateRow($curRow);
+    console.log("row = " + $('#main_table tr').index($curRow));
     updateTotalColumn();
     // if the last row is filled out, add another row
     if (rowTotal !== "" && lastRow().get(0) === $curRow.get(0)) {

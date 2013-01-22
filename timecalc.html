@@ -2,13 +2,15 @@
 
 <head>
   <!--link rel="stylesheet" type="text/css" href="css/reset.css"-->
+  <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" media="screen">
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <title>Time Sheet Calculator</title>
 </head>
 
 <body>
-    <table id="main_table">
       <h1 align="center">Time Sheet Calculator</h1>
+  <table><tr><td>
+    <table id="main_table" class="table">
         <tr class="header">
           <th>Time In</th>
           <th>Time Out</th>
@@ -33,16 +35,19 @@
             </td>
         </tr>
     </table>
+  </td></tr></table>
 
     <p>
     <table>
     <tr>
     <td class='instructions'>
+      <small>
       <strong>Time In/Out</strong> should be a time of the day ("9am", "8:15p").
       <br>
       <strong>Break</strong> should be a duration in hours (e.g. "1", "0.25").
       <br> Both tab or enter advances to the next field.
       <br> Additional rows are added automatically as necessary.
+      </small>
     </td>
     </tr>
     </table>
