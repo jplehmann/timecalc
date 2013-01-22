@@ -1,13 +1,13 @@
 TimeCalc
 ========
-A simple timesheet calculator for adding up hours worked.  You can see a live version here: [http://timecalc.herokuapp.com]
+A simple timesheet calculator for adding up hours worked.  You can see a live version here: http://timecalc.herokuapp.com
 
 I designed this to have a small app to tinker with JavaScript and related technologies. So far it incorporates: 
 * [JQuery] for UI behavior
 * [Bootstrap] for styling
 * [Moment] for time parsing
 * [Jasmine] for BDD specification tests
-* [Herkou] for hosting using a thin Ruby [Rack] layer
+* [Heroku] for hosting using a thin Ruby [Rack] layer
 
 In the future I play to try out:
 * [Cucumber] acceptance testing
