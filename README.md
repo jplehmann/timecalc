@@ -1,15 +1,45 @@
 TimeCalc
 ========
-A simple timesheet calculator for adding up hours worked in a week.  I designed this to have a small app to tinker with JavaScript and related technologies.
+A simple timesheet calculator for adding up hours worked.  
 
+I designed this to have a small app to tinker with JavaScript and related technologies. So far it incorporates: 
+* [JQuery] for UI behavior
+* [Bootstrap] for styling
+* [Moment] for time parsing
+* [Jasmine] for BDD specification tests
+* [Herkou] for hosting using a thin Ruby [Rack] layer
 
-Features
---------
+In the future I play to try out:
+* [Cucumber] acceptance testing
+* [Knockout] for UI interactions
+* [Mustache] templating
+* [LESS] for CSS
+* Underscore or Lo-Dash for functional constructs
 
+Todo
+----
+- rearrange files in directories
+- Github for feedback -- how to allow comments?
+- HTML validation
+- CSS validation
+- JSLint
+---
+- Switch to using Web Hosted JS files? for jquery?
+* tool tips on headers with help
+* garbage times should not convert ("kjsdf" or "900")
+? should leave break times there, normalized
+* Should allow checkbox to round to nearest .25
+* times like "900"
 
+Questions
+---------
+- better to be more specific or general in selectors?
+- how to properly center the h1
+- should i have used tables, and nested tables?
+- consider using input type=time, number; what versions are supported?
 
-Stories
--------
+Stories Complete
+-----------------
 x should display 5 rows with 3 columns
 x should label rows: day 1, day 2, ...
 x should display 3 column headers: Time In, Time Out, Break Length
@@ -35,46 +65,6 @@ x After filling out the last valid row, another is added
 x Should be able to click a button to clear to start over (reload?)
 x Deploy to host environment (Heroku)
 
-Todo
-----
-
-* Should allow checkbox to round to nearest .25
-* Style it
-  * different color rows?
-  * tool tips on headers with help
-  * prettier buttons
-
-clear shoudl clear warnings!!
-header
-bolding
-input fields
-all margins
-
-add tooltips?
-
-o consider using input type=time, number
-o change colors -- highlight
-should i have used tables, and nested tables?
-how to properly center the h1
-
-Misc
-----
-Switch to using Web Hosted JS files? for jquery?
-HTML & CSS validator
-JSLint
-Github for feedback -- how to allow comments?
-
-Cucumber BDD-style acceptance testing
-Knockout.js for UI interactions
-Mustache templating
-CSS with LESS
-
-
-Low Priority
-------------
-Should allow times without punctuation
-
-
 Contact
 -------
 Post bugs and issues on [github].  Send other comments to John Lehmann:
@@ -82,3 +72,13 @@ first last at geemail dotcom or [@jplehmann]
 
 [@jplehmann]: www.twitter.com/jplehmann
 [github]: https://github.com/jplehmann/coursera/issues
+[JQuery]: http://jquery.com/
+[Moment]: http://momentjs.com/
+[Bootstrap]: http://twitter.github.com/bootstrap/
+[Jasmine]: http://pivotal.github.com/jasmine/
+[Cucumber]: http://cukes.info/
+[Knockout]: http://knockoutjs.com/
+[Mustache]: https://github.com/janl/mustache.js/
+[LESS]: http://lesscss.org/
+[Herokou]: http://www.heroku.com/
+[Rack]: https://devcenter.heroku.com/articles/static-sites-ruby
