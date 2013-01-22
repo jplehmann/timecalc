@@ -24,6 +24,7 @@ function clearAndInit() {
   // XXX: does each return objects?  how can i wrap them
   $('#main_table tr.day').each(function(i, el) {
     clearRow(el); 
+    $(el).removeClass('error');
   });
   updateTotalColumn();
 };
