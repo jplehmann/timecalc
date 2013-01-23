@@ -22,7 +22,7 @@ function clearAndInit() {
   // auto-focus on the first input
   $('input:visible:first').first().focus();
   // XXX: does each return objects?  how can i wrap them
-  $('#main_table tr.day').each(function(i, el) {
+  $('.main_table tr.day').each(function(i, el) {
     clearRow(el); 
     $(el).removeClass('error');
   });
@@ -36,7 +36,7 @@ function updateTotalsOnBlur() {
   $("input").blur(function(event) {
     var $curRow = $(event.target).parents('tr').first();
     var rowTotal = updateRow($curRow);
-    console.log("row = " + $('#main_table tr').index($curRow));
+    console.log("row = " + $('.main_table tr').index($curRow));
     updateTotalColumn();
     // if the last row is filled out, add another row
     if (rowTotal !== "" && lastRow().get(0) === $curRow.get(0)) {
@@ -82,7 +82,7 @@ function clearButton() {
  * Returns the JQuery object for last 'day' row.
  */
 function lastRow() {
-  return $('#main_table tr.day').last();
+  return $('.main_table tr.day').last();
 }
 
 /**

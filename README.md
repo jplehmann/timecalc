@@ -18,12 +18,10 @@ In the future I play to try out:
 
 Todo
 ----
-- rearrange files in directories
-- Github for feedback -- how to allow comments?
 - HTML validation
 - CSS validation
 - JSLint
-- solicit feedback
+- solicit feedback -- can this be given in github?
 - Switch to using Web Hosted JS files? for jquery?
 * tool tips on headers with help
 * garbage times should not convert ("kjsdf" or "900")
