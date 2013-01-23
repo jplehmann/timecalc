@@ -1,41 +1,26 @@
 
-.wrapper {
-  width: 450px;
-  margin: 0 auto;
-  border: 0px solid;
+.outer_wrapper {
   text-align: center;
 }
 
-/* Table elements */
 .table_wrapper {
   width: 380px;
   margin: 15 auto;
 }
 
 #main_table {
-  /* yellow background */
   background: #FFD;
-  margin-top: 5px;
 }
 
-/* header */
 .header {
-  /* blue header background */
   background: #DDD;
 }
 
 .header th {
-  /* center header labels */
   text-align: center;
 }
 
-td {
-  border: 0px solid; 
-  /*margin-bottom: 10px; */
-}
-
 input {
-  /*margin: 0 5px 0 5px;*/
   text-align: right; 
   width: 75px; 
 }
@@ -46,11 +31,10 @@ div.day.total, div.week.total {
 }
 
 td.total-label {
-  padding-right: 15px;
   text-align: right;
+  padding-right: 15px;
 }
 
-/* Clear button */
 td.clear_button {
   text-align: center; 
 }
@@ -61,13 +45,16 @@ div.instructions {
   width: 320px;
   position: relative;
   top: 20px;
-  /*
-  border: 1px solid;
-  left: 5px;
-  */
 }
 
 .instructions p {
   margin-bottom: 3px;
 }
+
+/* for debugging layouts
+td, .header th, .outer_wrapper, 
+.table_wrapper, div.instructions {
+  border: 0px solid;
+}
+*/
 
