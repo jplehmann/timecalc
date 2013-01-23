@@ -2,14 +2,14 @@
 .wrapper {
   width: 450px;
   margin: 0 auto;
-  border: 1px solid;
+  border: 0px solid;
   text-align: center;
 }
 
 /* Table elements */
 .table_wrapper {
   width: 380px;
-  margin: 0 auto;
+  margin: 15 auto;
 }
 
 #main_table {
@@ -55,10 +55,17 @@ td.clear_button {
   text-align: center; 
 }
 
-table.instructions {
+div.instructions {
+  text-align:left;
+  margin: 0 auto;
+  width: 380px;
   position: relative;
-  top: 10px;
+  top: 20px;
+  left: 10px;
+  /*
+  border: 1px solid;
   left: 5px;
+  */
 }
 
 .instructions p {
