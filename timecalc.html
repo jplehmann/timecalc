@@ -1,7 +1,6 @@
 <html>
 
 <head>
-  <!--link rel="stylesheet" type="text/css" href="css/reset.css"-->
   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" media="screen">
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <title>Time Sheet Calculator</title>
@@ -9,50 +8,47 @@
 
 <body>
   <div class="outer_wrapper">
+
   <h3>Time Sheet Calculator</h3>
+
   <div class="table_wrapper">
-    <table id="main_table" class="table table-bordered table-hover">
-        <tr class="header">
-          <th>Time In</th>
-          <th>Time Out</th>
-          <th>Break</th>
-          <th>Hours</th>
+  <table id="main_table" class="table table-bordered table-hover">
+      <tr class="header">
+        <th>Time In</th>
+        <th>Time Out</th>
+        <th>Break</th>
+        <th>Hours</th>
+      </tr>
+      <tbody>
+        <tr class="day">
+            <td><input></td>
+            <td><input></td>
+            <td><input></td>
+            <td><div class="day total"></div></td>
         </tr>
-        <tbody>
-          <tr class="day">
-              <td> <input name="timeStart"></td>
-              <td> <input name="timeEnd"></td>
-              <td> <input name="breakTime"></td>
-              <td> <div class="day total"></div></td>
-          </tr>
-        </tbody>
-        <tr class="total">
-            <td class="clear_button" colspan=1>
-              <input type="button" class="btn-small btn" value="clear"></input>
-            </td>
-            <td>
-            </td>
-            <td class="total-label">Total</td>
-            <td>
-                <div class="week total">0</div>
-            </td>
-        </tr>
-    </table>
-    </div>
+      </tbody>
+      <tr class="total">
+        <td class="clear_button" colspan=1>
+          <input type="button" class="btn-small btn" value="clear"></input>
+        </td>
+        <td></td>
+        <td class="total-label">Total</td>
+        <td><div class="week total">0</div></td>
+      </tr>
+  </table>
+  </div>
 
-    <p>
-    <div class='instructions'>
-      <h4>Tips:</h4>
-      <small>
-      <ul>
-        <li><strong>Time In/Out</strong> should be time of day ("9am", "8:15p").
-        <li><strong>Break</strong> should be a duration in hours (e.g. "1", "0.25").
-        <li> Both tab or enter advances to the next field.
-        <li> Additional rows are added automatically as necessary.
-      </ul>
-      </small>
-    </div>
-
+  <div class='instructions'>
+    <h4>Tips:</h4>
+    <small>
+    <ul>
+      <li><strong>Time In/Out</strong> should be time of day ("9am", "8:15p").
+      <li><strong>Break</strong> should be a duration in hours (e.g. "1", "0.25").
+      <li> Both tab or enter advances to the next field.
+      <li> Additional rows are added automatically as necessary.
+    </ul>
+    </small>
+  </div>
   </div>
 
   <script src="lib/jquery-1.9.0.min.js"></script>
