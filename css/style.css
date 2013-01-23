@@ -58,10 +58,9 @@ td.clear_button {
 div.instructions {
   text-align:left;
   margin: 0 auto;
-  width: 380px;
+  width: 320px;
   position: relative;
   top: 20px;
-  left: 10px;
   /*
   border: 1px solid;
   left: 5px;
