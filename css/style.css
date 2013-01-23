@@ -1,9 +1,15 @@
 
+.wrapper {
+  width: 450px;
+  margin: 0 auto;
+  border: 1px solid;
+  text-align: center;
+}
+
 /* Table elements */
-table {
-  margin-left: auto;
-  margin-right: auto;
+.table_wrapper {
   width: 380px;
+  margin: 0 auto;
 }
 
 #main_table {

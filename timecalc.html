@@ -8,8 +8,11 @@
 </head>
 
 <body>
-      <h3 align="center">Time Sheet Calculator</h3>
-  <table><tr><td>
+  <div class="wrapper">
+  <div class="header_wrapper">
+      <h3>Time Sheet Calculator</h3>
+  </div>
+  <div class="table_wrapper">
     <table id="main_table" class="table table-bordered table-hover">
         <tr class="header">
           <th>Time In</th>
@@ -27,7 +30,7 @@
         </tbody>
         <tr class="total">
             <td class="clear_button" colspan=1>
-              <input type="button" class="btn-small btn" value="clear"></input>
+              <input type="button" class="btn-mini btn" value="clear"></input>
             </td>
             <td>
             </td>
@@ -37,7 +40,7 @@
             </td>
         </tr>
     </table>
-  </td></tr></table>
+    </div>
 
     <p>
     <table class='instructions'>
@@ -55,6 +58,8 @@
     </td>
     </tr>
     </table>
+
+  </div>
 
   <script src="lib/jquery-1.9.0.min.js"></script>
   <script src="lib/moment.min.js"></script>
