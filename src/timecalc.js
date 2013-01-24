@@ -1,3 +1,7 @@
+/*jslint browser: true*/
+/*global $, jQuery*/
+
+// use strict
 
 var HOUR_PRECISION = 2;
 
@@ -27,15 +31,16 @@ function clearAndInit() {
     $(el).removeClass('error');
   });
   updateTotalColumn();
-};
+}
 
 /** 
  * When leaving a cell, update the totals
  */
 function updateTotalsOnBlur() {
   $("input").blur(function(event) {
-    var $curRow = $(event.target).parents('tr').first();
-    var rowTotal = updateRow($curRow);
+    var $curRow, totalRow;
+    $curRow = $(event.target).parents('tr').first();
+    rowTotal = updateRow($curRow);
     console.log("row = " + $('.main_table tr').index($curRow));
     updateTotalColumn();
     // if the last row is filled out, add another row
@@ -61,8 +66,9 @@ function selectAllOnClick() {
 function enterAdvancesField() {
   $("input").bind('keypress', function(event) {
     if (event.keyCode === 13) {
-      var $set = $('input');
-      var $next = $set.eq($set.index(this)+1);
+      var $set, $next;
+      $set = $('input');
+      $next = $set.eq($set.index(this)+1);
       $next.focus();
     }
   });
@@ -113,7 +119,7 @@ function updateRow($curRow) {
   } else {
     totalTime = totalTime.toFixed(HOUR_PRECISION);
   }
-  $total = $curRow.find("div.day.total").text(totalTime)
+  $total = $curRow.find("div.day.total").text(totalTime);
   if (totalTime < 0) {
     $curRow.addClass('error');
   }
@@ -128,16 +134,17 @@ function updateRow($curRow) {
  * @return undefined if not valid input.
  */
 function computeRow($curRow) {
+  var $inputs, timeIn, timeOut, breakLen;
   // get A B and C, and parse
-  var $inputs = $curRow.find('input');
+  $inputs = $curRow.find('input');
 
-  var timeIn = updateInputIfValid($inputs.eq(0));
-  var timeOut = updateInputIfValid($inputs.eq(1), timeIn);
+  timeIn = updateInputIfValid($inputs.eq(0));
+  timeOut = updateInputIfValid($inputs.eq(1), timeIn);
   if (timeIn === undefined || timeOut === undefined) {
     return undefined;
   }
 
-  var breakLen = parseFloat($inputs.eq(2).val()) || 0;
+  breakLen = parseFloat($inputs.eq(2).val()) || 0;
   // clear out the break field if set to 0 so it's clear
   // that we didn't use it
   if (breakLen === 0) {
@@ -153,11 +160,12 @@ function computeRow($curRow) {
  * @return undefined if not valid input.
  */
 function updateInputIfValid($input, refTime) {
-  var timeArr = parseTime($input.val(), refTime);
+  var timeArr, time;
+  timeArr = parseTime($input.val(), refTime);
   if (timeArr === undefined) {
     return undefined;
   } else {
-    var time = timeArr[0];
+    time = timeArr[0];
     $input.val(timeArr[1]);
   }
   return timeArr[0];
@@ -172,15 +180,16 @@ function updateInputIfValid($input, refTime) {
  *   computed and a string showing how we interpreted it
  */
 function parseTime(val, refTime) {
+  var meridiem, m, fval, interpVal;
   // doesn't parse 2p correctly so add a 'm' if we detect this
-  var meridiem = val && /[a|p]m$/i.test(val);
+  meridiem = val && /[a|p]m$/i.test(val);
   if (val.length > 0 && 
       (val[val.length-1] === 'p' || val[val.length-1] === 'a')) {
     val += "m";
     meridiem = true;
   }
   // let moment.js figure out what they said
-  var m = moment(val, "h:mma")
+  m = moment(val, "h:mma");
   if (!m) {
     return undefined;
   }
@@ -190,7 +199,7 @@ function parseTime(val, refTime) {
     return undefined;
   }
   // hours comes back in 0-23 range so it's already "military" time
-  var fval = m.hours() + m.minutes()/60.0;
+  fval = m.hours() + m.minutes()/60.0;
   if (!fval && fval !== 0) {
     return undefined;
   }
@@ -203,7 +212,7 @@ function parseTime(val, refTime) {
     }
   }
   // pass back the interpreted value, how we understood it 
-  var interpVal = m.format("h:mma");
+  interpVal = m.format("h:mma");
   return [fval, interpVal];
 }
 
@@ -211,13 +220,14 @@ function parseTime(val, refTime) {
  * Add across the totals column.
  */
 function updateTotalColumn() {
+  var arr, total;
   // "get" gets the array behind the jquery object
-  var arr = $('div.day.total').map(function(i, el) {
+  arr = $('div.day.total').map(function(i, el) {
     return $(el).text();
   }).get();
-  var total = addTimes(arr);
+  total = addTimes(arr);
   $('div.week.total').text(total.toFixed(HOUR_PRECISION));
-};
+}
 
 /**
  * Reduce an array of strings by summing as numbers.

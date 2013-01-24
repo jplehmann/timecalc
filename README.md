@@ -21,6 +21,16 @@ Todo
 - HTML validation
 - CSS validation
 - JSLint
+  - why does it think else cannot come after return in a block?
+  - why do vars need to be all defined at once at the top?
+  - other stuff it didn't like
+    - slint src/timecalc.js  --maxerr=10000 --indent=2 --white --undef --sloppy
+    - doesn't like top down method definitions (using before defined)
+    - indent=2
+    - doesn't like my whitespace
+    - not using strict mode
+- test with "use strict"
+  - wrap with global function
 - solicit feedback -- can this be given in github?
 - Switch to using Web Hosted JS files? for jquery?
 * tool tips on headers with help
