@@ -1,9 +1,12 @@
 /*jslint browser: true*/
-/*global $, jQuery*/
+/*global $, jQuery, moment*/
 
-// use strict
+'use strict';
 
 var HOUR_PRECISION = 2;
+
+// I want to define my functions top-down, but declaring them satisfies strict.
+var clearAndInit, updateTotalsOnBlur, selectAllOnClick, enterAdvancesField, clearButton, addRow, clearRow, updateTotalColumn, rowTotal, updateRow, lastRow, computeRow, updateInputIfValid, parseTime, addTimes;
 
 /**
  * Setup.
@@ -113,7 +116,8 @@ function clearRow(curRow) {
  * @return the total
  */
 function updateRow($curRow) {
-  var totalTime = computeRow($curRow);
+  var totalTime, $total;
+  totalTime = computeRow($curRow);
   if (totalTime === undefined) { 
     totalTime = ""; 
   } else {
