@@ -18,33 +18,33 @@ In the future I play to try out:
 
 Todo
 ----
-- HTML validation
-- CSS validation
+* CSS validation
+* HTML validation
+* Switch to using Web Hosted JS files? for jquery?
+* solicit feedback -- can this be given in github? stackexchange?
+
+Features Todo
+-------------
+* tool tips on headers with help
+* garbage times should not convert ("kjsdf" or "900")
+* should leave break times there, normalized??
+* Should allow checkbox to round to nearest .25
+* times like "900"
+
+Questions
+---------
+- how to namespace with the IIFE and let jasmine see it?
+- better to be more specific or general in selectors?
+- consider using input type=time, number; what versions are supported?
 - JSLint
-  - why does it think else cannot come after return in a block?
-  - why do vars need to be all defined at once at the top?
+  - why does it think else cannot come after return in a block? 172
+  - learn more about hoisting as to why vars have to be declared at once
   - other stuff it didn't like
     - slint src/timecalc.js  --maxerr=10000 --indent=2 --white --undef --sloppy
     - doesn't like top down method definitions (using before defined)
     - indent=2
     - doesn't like my whitespace
     - not using strict mode
-- test with "use strict"
-  - wrap with global function
-- solicit feedback -- can this be given in github?
-- Switch to using Web Hosted JS files? for jquery?
-* tool tips on headers with help
-* garbage times should not convert ("kjsdf" or "900")
-- should leave break times there, normalized??
-* Should allow checkbox to round to nearest .25
-* times like "900"
-
-Questions
----------
-- better to be more specific or general in selectors?
-- how to properly center the h1
-- should i have used tables, and nested tables?
-- consider using input type=time, number; what versions are supported?
 
 Stories Complete
 -----------------

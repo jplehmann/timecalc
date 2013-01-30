@@ -1,6 +1,9 @@
 /*jslint browser: true*/
 /*global $, jQuery, moment*/
 
+// namespacing does not allow Jasmine to see my functions
+//(function() {
+
 'use strict';
 
 var HOUR_PRECISION = 2;
@@ -11,7 +14,7 @@ var clearAndInit, updateTotalsOnBlur, selectAllOnClick, enterAdvancesField, clea
 /**
  * Setup.
  */
-$(document).ready(function() {
+$(document).ready(function () {
   clearAndInit();
   updateTotalsOnBlur();
   selectAllOnClick();
@@ -22,25 +25,25 @@ $(document).ready(function() {
   addRow();
 });
 
-/** 
+/**
  * For initializing and/or clearing the table
  */
 function clearAndInit() {
   // auto-focus on the first input
   $('input:visible:first').first().focus();
   // XXX: does each return objects?  how can i wrap them
-  $('.main_table tr.day').each(function(i, el) {
-    clearRow(el); 
+  $('.main_table tr.day').each(function (i, el) {
+    clearRow(el);
     $(el).removeClass('error');
   });
   updateTotalColumn();
 }
 
-/** 
+/**
  * When leaving a cell, update the totals
  */
 function updateTotalsOnBlur() {
-  $("input").blur(function(event) {
+  $("input").blur(function (event) {
     var $curRow, totalRow;
     $curRow = $(event.target).parents('tr').first();
     rowTotal = updateRow($curRow);
@@ -58,30 +61,30 @@ function updateTotalsOnBlur() {
  * the value by default
  */
 function selectAllOnClick() {
-  $('input').click(function(){
+  $('input').click(function () {
     $(this).select();
   });
 }
 
-/** 
+/**
  * "Enter" should go to the next input field like tab
  */
 function enterAdvancesField() {
-  $("input").bind('keypress', function(event) {
+  $("input").bind('keypress', function (event) {
     if (event.keyCode === 13) {
       var $set, $next;
       $set = $('input');
-      $next = $set.eq($set.index(this)+1);
+      $next = $set.eq($set.index(this) + 1);
       $next.focus();
     }
   });
 }
 
-/** 
+/**
  * Setup clear button action
  */
 function clearButton() {
-  $('td.clear_button').click(function(event) {
+  $('td.clear_button').click(function (event) {
     //location.reload();
     clearAndInit();
   });
@@ -118,16 +121,15 @@ function clearRow(curRow) {
 function updateRow($curRow) {
   var totalTime, $total;
   totalTime = computeRow($curRow);
-  if (totalTime === undefined) { 
-    totalTime = ""; 
+  if (totalTime === undefined) {
+    totalTime = "";
   } else {
     totalTime = totalTime.toFixed(HOUR_PRECISION);
   }
   $total = $curRow.find("div.day.total").text(totalTime);
   if (totalTime < 0) {
     $curRow.addClass('error');
-  }
-  else {
+  } else {
     $curRow.removeClass('error');
   }
   return totalTime;
@@ -155,7 +157,7 @@ function computeRow($curRow) {
     $inputs.eq(2).val("");
   }
   //console.log("ti: " + timeIn + ", to: " + timeOut);
-  return timeOut-timeIn-breakLen;
+  return timeOut - timeIn - breakLen;
 }
 
 /**
@@ -187,8 +189,8 @@ function parseTime(val, refTime) {
   var meridiem, m, fval, interpVal;
   // doesn't parse 2p correctly so add a 'm' if we detect this
   meridiem = val && /[a|p]m$/i.test(val);
-  if (val.length > 0 && 
-      (val[val.length-1] === 'p' || val[val.length-1] === 'a')) {
+  if (val.length > 0 &&
+      (val[val.length - 1] === 'p' || val[val.length - 1] === 'a')) {
     val += "m";
     meridiem = true;
   }
@@ -203,7 +205,7 @@ function parseTime(val, refTime) {
     return undefined;
   }
   // hours comes back in 0-23 range so it's already "military" time
-  fval = m.hours() + m.minutes()/60.0;
+  fval = m.hours() + m.minutes() / 60.0;
   if (!fval && fval !== 0) {
     return undefined;
   }
@@ -212,10 +214,10 @@ function parseTime(val, refTime) {
   if (!meridiem && fval < refTime) {
     if (m.hours() < 12) {
       fval += 12;
-      m.hours(m.hours()+12);
+      m.hours(m.hours() + 12);
     }
   }
-  // pass back the interpreted value, how we understood it 
+  // pass back the interpreted value, how we understood it
   interpVal = m.format("h:mma");
   return [fval, interpVal];
 }
@@ -226,7 +228,7 @@ function parseTime(val, refTime) {
 function updateTotalColumn() {
   var arr, total;
   // "get" gets the array behind the jquery object
-  arr = $('div.day.total').map(function(i, el) {
+  arr = $('div.day.total').map(function (i, el) {
     return $(el).text();
   }).get();
   total = addTimes(arr);
@@ -238,7 +240,7 @@ function updateTotalColumn() {
  */
 function addTimes(times) {
   var total = 0;
-  times.forEach(function(x) {
+  times.forEach(function (x) {
     // assume it's an hour total
     // ignore if blank, NaN, undefined, etc. (or 0)
     if (x) {
@@ -247,5 +249,7 @@ function addTimes(times) {
   });
   return total;
 }
+
+//})();
 
 
