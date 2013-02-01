@@ -20,6 +20,7 @@ Todo
 ----
 * CSS validation
 * HTML validation
+  * what doctype to use and why does it uncenter my table
 * Switch to using Web Hosted JS files? for jquery?
 * solicit feedback -- can this be given in github? stackexchange?
 
@@ -33,6 +34,7 @@ Features Todo
 
 Questions
 ---------
+- why did margin: 15 auto; not work on my table_wrapper? -- b/c I didn't say "px"
 - how to namespace with the IIFE and let jasmine see it?
 - better to be more specific or general in selectors?
 - consider using input type=time, number; what versions are supported?
