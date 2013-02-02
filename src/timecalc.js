@@ -30,9 +30,9 @@ $(document).ready(function () {
  */
 function clearAndInit() {
   // auto-focus on the first input
-  $('input:visible:first').first().focus();
+  $('.day input:visible:first').first().focus();
   // XXX: does each return objects?  how can i wrap them
-  $('.main_table tr.day').each(function (i, el) {
+  $('.main-table tr.day').each(function (i, el) {
     clearRow(el);
     $(el).removeClass('error');
   });
@@ -47,7 +47,7 @@ function updateTotalsOnBlur() {
     var $curRow, totalRow;
     $curRow = $(event.target).parents('tr').first();
     rowTotal = updateRow($curRow);
-    console.log("row = " + $('.main_table tr').index($curRow));
+    console.log("row = " + $('.main-table tr').index($curRow));
     updateTotalColumn();
     // if the last row is filled out, add another row
     if (rowTotal !== "" && lastRow().get(0) === $curRow.get(0)) {
@@ -84,7 +84,7 @@ function enterAdvancesField() {
  * Setup clear button action
  */
 function clearButton() {
-  $('td.clear_button').click(function (event) {
+  $('td.clear-button').click(function (event) {
     //location.reload();
     clearAndInit();
   });
@@ -94,7 +94,7 @@ function clearButton() {
  * Returns the JQuery object for last 'day' row.
  */
 function lastRow() {
-  return $('.main_table tr.day').last();
+  return $('.main-table tr.day').last();
 }
 
 /**
@@ -110,7 +110,7 @@ function addRow() {
  */
 function clearRow(curRow) {
   $(curRow).find('input').val("");
-  $(curRow).find('div.day.total').text("");
+  $(curRow).find('.day-total').text("");
 }
 
 /**
@@ -126,7 +126,7 @@ function updateRow($curRow) {
   } else {
     totalTime = totalTime.toFixed(HOUR_PRECISION);
   }
-  $total = $curRow.find("div.day.total").text(totalTime);
+  $total = $curRow.find(".day-total").text(totalTime);
   if (totalTime < 0) {
     $curRow.addClass('error');
   } else {
@@ -228,11 +228,11 @@ function parseTime(val, refTime) {
 function updateTotalColumn() {
   var arr, total;
   // "get" gets the array behind the jquery object
-  arr = $('div.day.total').map(function (i, el) {
+  arr = $('.day-total').map(function (i, el) {
     return $(el).text();
   }).get();
   total = addTimes(arr);
-  $('div.week.total').text(total.toFixed(HOUR_PRECISION));
+  $('.week-total').text(total.toFixed(HOUR_PRECISION));
 }
 
 /**

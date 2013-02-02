@@ -19,8 +19,6 @@ In the future I play to try out:
 Todo
 ----
 * CSS validation
-* HTML validation
-  * what doctype to use and why does it uncenter my table
 * Switch to using Web Hosted JS files? for jquery?
 * solicit feedback -- can this be given in github? stackexchange?
 

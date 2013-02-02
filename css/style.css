@@ -1,14 +1,14 @@
 
-.outer_wrapper {
+.outer-wrapper {
   text-align: center;
 }
 
-.table_wrapper {
+.table-wrapper {
   width: 380px;
   margin: 15px auto;
 }
 
-.main_table {
+.main-table {
   background: #FFD;
 }
 
@@ -26,7 +26,7 @@ input {
   width: 70px; 
 }
 
-div.day.total, div.week.total {
+.day-total, .week-total {
   text-align: right;
   width: 65px;
 }
@@ -36,7 +36,7 @@ td.total-label {
   padding-right: 15px;
 }
 
-td.clear_button {
+td.clear-button {
   text-align: center; 
 }
 
@@ -54,8 +54,8 @@ div.instructions {
 
 
 /* for debugging layouts 
-body, h3, div, table, td, .header th, .outer_wrapper, 
-.table_wrapper, div.instructions {
+body, h3, div, table, td, .header th, .outer-wrapper, 
+.table-wrapper, div.instructions {
   border: 1px solid;
 }
 */
