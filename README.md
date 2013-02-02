@@ -18,8 +18,6 @@ In the future I play to try out:
 
 Todo
 ----
-* CSS validation
-* Switch to using Web Hosted JS files? for jquery?
 * solicit feedback -- can this be given in github? stackexchange?
 
 Features Todo
@@ -32,9 +30,7 @@ Features Todo
 
 Questions
 ---------
-- why did margin: 15 auto; not work on my table_wrapper? -- b/c I didn't say "px"
 - how to namespace with the IIFE and let jasmine see it?
-- better to be more specific or general in selectors?
 - consider using input type=time, number; what versions are supported?
 - JSLint
   - why does it think else cannot come after return in a block? 172
@@ -45,6 +41,14 @@ Questions
     - indent=2
     - doesn't like my whitespace
     - not using strict mode
+- CSSLint
+  - better to be more specific or general in selectors? / 
+    what are performance ramification of overqualifying? how did it know it's
+    overqualified, in case I had other elements with same class?
+- how to get code review on github?
+  - switch default branch to empty and remove everything
+  - create another branch to full and add all the code
+  - issue a pull request
 
 Stories Complete
 -----------------
