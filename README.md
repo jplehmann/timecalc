@@ -10,15 +10,16 @@ I designed this to have a small app to tinker with JavaScript and related techno
 * [Heroku] for hosting using a thin Ruby [Rack] layer
 
 In the future I play to try out:
+* convert to objects
 * [Cucumber] acceptance testing
 * [Knockout] for UI interactions
 * [Mustache] templating
-* [LESS] for CSS
-* Underscore or Lo-Dash for functional constructs
+* [modularize] with [Require]/[AMD]
+* [LESS] for CSS (or Sass Compass)
+* [Underscore] or Lo-Dash for functional constructs
 
 Todo
 ----
-* solicit feedback -- can this be given in github? stackexchange?
 
 Features Todo
 -------------
@@ -94,3 +95,7 @@ first last at geemail dotcom or [@jplehmann]
 [LESS]: http://lesscss.org/
 [Heroku]: http://www.heroku.com/
 [Rack]: https://devcenter.heroku.com/articles/static-sites-ruby
+[Underscore]: http://underscorejs.org/
+[AMD]: https://github.com/amdjs/amdjs-api/wiki/AMD
+[Require]: http://requirejs.org
+[modularize]: http://addyosmani.com/writing-modular-js/
