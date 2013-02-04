@@ -3,7 +3,7 @@
 
 // namespacing does not allow Jasmine to see my functions
 //(function() {
-define(["jquery", "moment.min"], function($) {
+define(["jquery", "../lib/moment.min"], function($) {
 
   'use strict';
 
