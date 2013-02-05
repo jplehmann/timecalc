@@ -6,6 +6,7 @@ I designed this to have a small app to tinker with JavaScript and related techno
 * [JQuery] for UI behavior
 * [Bootstrap] for styling
 * [Moment] for time parsing
+* [Require] for modular script loading
 * [Jasmine] for BDD specification tests
 * [Heroku] for hosting using a thin Ruby [Rack] layer
 
@@ -14,13 +15,11 @@ In the future I play to try out:
 * [Cucumber] acceptance testing
 * [Knockout] for UI interactions
 * [Mustache] templating
-* [modularize] with [Require]/[AMD]
 * [LESS] for CSS (or Sass Compass)
 * [Underscore] or Lo-Dash for functional constructs
 
 Todo
 ----
-- fix jasmine http://rockycode.com/blog/jasmine-unit-testing-requirejs/
 
 Features Todo
 -------------
