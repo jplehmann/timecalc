@@ -1,9 +1,7 @@
 /*jslint browser: true*/
-/*global $, jQuery, moment*/
+/*global $, jQuery, moment, console*/
 
-// namespacing does not allow Jasmine to see my functions
-//(function() {
-
+(function(exports) {
 'use strict';
 
 var HOUR_PRECISION = 2;
@@ -32,9 +30,9 @@ function clearAndInit() {
   // auto-focus on the first input
   $('.day input:visible:first').first().focus();
   // XXX: does each return objects?  how can i wrap them
-  $('.main-table tr.day').each(function (i, el) {
-    clearRow(el);
-    $(el).removeClass('error');
+  $('.main-table tr.day').each(function () {
+    clearRow(this);
+    $(this).removeClass('error');
   });
   updateTotalColumn();
 }
@@ -44,9 +42,8 @@ function clearAndInit() {
  */
 function updateTotalsOnBlur() {
   $("input").blur(function (event) {
-    var $curRow, totalRow;
-    $curRow = $(event.target).parents('tr').first();
-    rowTotal = updateRow($curRow);
+    var $curRow = $(event.target).parents('tr').first(),
+				rowTotal = updateRow($curRow);
     console.log("row = " + $('.main-table tr').index($curRow));
     updateTotalColumn();
     // if the last row is filled out, add another row
@@ -72,9 +69,8 @@ function selectAllOnClick() {
 function enterAdvancesField() {
   $("input").bind('keypress', function (event) {
     if (event.keyCode === 13) {
-      var $set, $next;
-      $set = $('input');
-      $next = $set.eq($set.index(this) + 1);
+      var $set = $('input'),
+					$next = $set.eq($set.index(this) + 1);
       $next.focus();
     }
   });
@@ -106,7 +102,7 @@ function addRow() {
 }
 
 /**
- * Takes a row object (not selector) and reset values.
+ * Takes a row object (not selector) and resets values.
  */
 function clearRow(curRow) {
   $(curRow).find('input').val("");
@@ -119,14 +115,13 @@ function clearRow(curRow) {
  * @return the total
  */
 function updateRow($curRow) {
-  var totalTime, $total;
-  totalTime = computeRow($curRow);
+  var totalTime = computeRow($curRow);
   if (totalTime === undefined) {
     totalTime = "";
   } else {
     totalTime = totalTime.toFixed(HOUR_PRECISION);
   }
-  $total = $curRow.find(".day-total").text(totalTime);
+  $curRow.find(".day-total").text(totalTime);
   if (totalTime < 0) {
     $curRow.addClass('error');
   } else {
@@ -140,17 +135,15 @@ function updateRow($curRow) {
  * @return undefined if not valid input.
  */
 function computeRow($curRow) {
-  var $inputs, timeIn, timeOut, breakLen;
   // get A B and C, and parse
-  $inputs = $curRow.find('input');
-
-  timeIn = updateInputIfValid($inputs.eq(0));
-  timeOut = updateInputIfValid($inputs.eq(1), timeIn);
+  var $inputs = $curRow.find('input'),
+			timeIn = updateInputIfValid($inputs.eq(0)),
+			timeOut = updateInputIfValid($inputs.eq(1), timeIn);
   if (timeIn === undefined || timeOut === undefined) {
     return undefined;
   }
 
-  breakLen = parseFloat($inputs.eq(2).val()) || 0;
+  var breakLen = parseFloat($inputs.eq(2).val()) || 0;
   // clear out the break field if set to 0 so it's clear
   // that we didn't use it
   if (breakLen === 0) {
@@ -166,12 +159,10 @@ function computeRow($curRow) {
  * @return undefined if not valid input.
  */
 function updateInputIfValid($input, refTime) {
-  var timeArr, time;
-  timeArr = parseTime($input.val(), refTime);
+  var timeArr = parseTime($input.val(), refTime);
   if (timeArr === undefined) {
     return undefined;
   } else {
-    time = timeArr[0];
     $input.val(timeArr[1]);
   }
   return timeArr[0];
@@ -186,16 +177,13 @@ function updateInputIfValid($input, refTime) {
  *   computed and a string showing how we interpreted it
  */
 function parseTime(val, refTime) {
-  var meridiem, m, fval, interpVal;
   // doesn't parse 2p correctly so add a 'm' if we detect this
-  meridiem = val && /[a|p]m$/i.test(val);
-  if (val.length > 0 &&
-      (val[val.length - 1] === 'p' || val[val.length - 1] === 'a')) {
+  var meridiem = /[a|p]m?$/i.test(val);
+  if (/[a|p]$/i.test(val)) {
     val += "m";
-    meridiem = true;
   }
   // let moment.js figure out what they said
-  m = moment(val, "h:mma");
+  var m = moment(val, "h:mma");
   if (!m) {
     return undefined;
   }
@@ -205,7 +193,7 @@ function parseTime(val, refTime) {
     return undefined;
   }
   // hours comes back in 0-23 range so it's already "military" time
-  fval = m.hours() + m.minutes() / 60.0;
+  var fval = m.hours() + m.minutes() / 60.0;
   if (!fval && fval !== 0) {
     return undefined;
   }
@@ -218,7 +206,7 @@ function parseTime(val, refTime) {
     }
   }
   // pass back the interpreted value, how we understood it
-  interpVal = m.format("h:mma");
+  var interpVal = m.format("h:mma");
   return [fval, interpVal];
 }
 
@@ -226,12 +214,11 @@ function parseTime(val, refTime) {
  * Add across the totals column.
  */
 function updateTotalColumn() {
-  var arr, total;
   // "get" gets the array behind the jquery object
-  arr = $('.day-total').map(function (i, el) {
-    return $(el).text();
-  }).get();
-  total = addTimes(arr);
+  var arr = $('.day-total').map(function () {
+				return $(this).text();
+			}).get(),
+			total = addTimes(arr);
   $('.week-total').text(total.toFixed(HOUR_PRECISION));
 }
 
@@ -250,6 +237,8 @@ function addTimes(times) {
   return total;
 }
 
-//})();
-
-
+// exported api
+exports.parseTime = parseTime;
+exports.updateInputIfValid = updateInputIfValid;
+exports.addTimes = addTimes;
+})(window);
