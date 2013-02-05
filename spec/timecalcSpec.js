@@ -1,10 +1,5 @@
-require.config({
-  paths: {
-    "moment": "lib/moment.min",
-  }
-});
 
-define(["src/timecalc"], function(timecalc) {
+define(["../src/timecalc"], function(timecalc) {
 
   describe("Time Parser", function() {
       it("should understand whole hours", function() {
