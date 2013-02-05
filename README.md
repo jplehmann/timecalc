@@ -20,6 +20,7 @@ In the future I play to try out:
 
 Todo
 ----
+- fix jasmine http://rockycode.com/blog/jasmine-unit-testing-requirejs/
 
 Features Todo
 -------------

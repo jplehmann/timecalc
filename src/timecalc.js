@@ -1,8 +1,6 @@
 /*jslint browser: true*/
 /*global $, jQuery, moment*/
 
-// namespacing does not allow Jasmine to see my functions
-//(function() {
 define(["jquery", "moment"], function($) {
 
   'use strict';
@@ -255,9 +253,10 @@ define(["jquery", "moment"], function($) {
     return total;
   }
 
-  return {init: init};
+  return {
+    init: init, 
+    updateInputIfValid: updateInputIfValid, 
+    parseTime: parseTime,
+    addTimes: addTimes
+  };
 });
-
-//})();
-
-
