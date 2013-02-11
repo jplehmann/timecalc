@@ -20,10 +20,14 @@ In the future I play to try out:
 
 Todo
 ----
-* knockout
+* Knockout conversion
   * rows: 3 inputs + total
+  * parse & update values after they're entered
   * grand total
   * init to 3 rows and add new ones
+  * clear button
+  * validation / error display
+  * move parseTime, etc into utility file
 
 Features Todo
 -------------
