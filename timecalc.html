@@ -32,12 +32,12 @@
               <td><div class="week-total">0</div></td>
             </tr>
           </tfoot>
-          <tbody>
+          <tbody data-bind='foreach: rows'>
             <tr class="day">
-                <td><input></td>
-                <td><input></td>
-                <td><input></td>
-                <td><div class="day-total"></div></td>
+                <td><input class='required' data-bind='value:timeIn'></td>
+                <td><input class='required' data-bind='value:timeOut'></td>
+                <td><input class='number' data-bind='value:breakLen'></td>
+                <td><div class="day-total" data-bind='text:rowTotal'></div></td>
             </tr>
           </tbody>
       </table>

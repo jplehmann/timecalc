@@ -1,6 +1,7 @@
 require.config({
   paths: {
     "moment": "../lib/moment.min",
+    "knockout": "../lib/knockout-2.2.1",
   }
 });
 

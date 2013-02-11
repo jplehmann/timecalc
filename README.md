@@ -20,6 +20,10 @@ In the future I plan to try out:
 
 Todo
 ----
+* knockout
+  * rows: 3 inputs + total
+  * grand total
+  * init to 3 rows and add new ones
 
 Features Todo
 -------------
