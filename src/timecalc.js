@@ -176,7 +176,7 @@ define(["jquery", "moment"], function($) {
   function parseTime(val, refTime) {
     // doesn't parse 2p correctly so add a 'm' if we detect this
     var meridiem = /[a|p]m?$/i.test(val);
-    if (val === 'p' || val ==='a') {
+    if (/[a|p]$/i.test(val)) {
       val += "m";
     }
     // let moment.js figure out what they said
