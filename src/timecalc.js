@@ -1,31 +1,73 @@
 /*jslint browser: true*/
 /*global $, jQuery, moment*/
 
-define(["jquery", "moment"], function($) {
+define(["jquery", "knockout", "moment"], function($, ko) {
   'use strict';
+
+  var TimeSheetModel = function(rows) {
+    var self = this;
+    self.rows = ko.observableArray(rows);
+    self.addRow = function() {
+      self.rows.push(new TimeSheetRow("", "", ""));
+    };
+    self.removeRow = function(row) {
+        self.row.remove(row);
+    };
+  };
+
+  var TimeSheetRow = function(timeIn, timeOut, breakLen) {
+    var self = this;
+    this.timeIn = ko.observable(timeIn);
+    this.timeOut = ko.observable(timeOut);
+    this.breakLen = ko.observable(breakLen);
+
+    this.rowTotal = ko.computed(function() {
+      var t1a = parseTime(self.timeIn());
+      if (t1a === undefined) {
+        return "";
+      }
+      var t2a = parseTime(self.timeOut(), t1a[0]);
+      if (t2a === undefined) {
+        return "";
+      }
+      var blen = parseFloat(self.breakLen()) || 0;
+      //console.log("ti: " + t1a[0] + ", to: " + t2a[0]);
+      return t2a[0] - t1a[0] - blen;
+    });
+  };
+ 
+  var viewModel = new TimeSheetModel([
+      new TimeSheetRow("9am", "5pm", "0.25"),
+      new TimeSheetRow("9am", "5pm", "0.25"),
+      new TimeSheetRow("", "", "")
+  ]);
+
+  ko.applyBindings(viewModel);
 
   var HOUR_PRECISION = 2;
 
-  // I want to define my functions top-down, but declaring them satisfies strict.
-  var clearAndInit, updateTotalsOnBlur, selectAllOnClick, enterAdvancesField, clearButton, addRow, clearRow, updateTotalColumn, rowTotal, updateRow, lastRow, computeRow, updateInputIfValid, parseTime, addTimes;
-
   function init() {
-    clearAndInit();
-    updateTotalsOnBlur();
-    selectAllOnClick();
+    focusOnFirst();
+    //clearAndInit();
+    //selectAllOnClick();
+    //updateTotalsOnBlur();
     enterAdvancesField();
-    clearButton();
+    //clearButton();
     // add a couple extra rows in the beginning to have 3 total
-    addRow();
-    addRow();
+    //addRow();
+    //addRow();
+  }
+
+  function focusOnFirst() {
+    // auto-focus on the first input
+    $('.day input:visible:first').first().focus();
   }
 
   /**
    * For initializing and/or clearing the table
    */
   function clearAndInit() {
-    // auto-focus on the first input
-    $('.day input:visible:first').first().focus();
+    focusOnFirst();
     // XXX: does each return objects?  how can i wrap them
     $('.main-table tr.day').each(function () {
       clearRow(this);
@@ -176,7 +218,7 @@ define(["jquery", "moment"], function($) {
   function parseTime(val, refTime) {
     // doesn't parse 2p correctly so add a 'm' if we detect this
     var meridiem = /[a|p]m?$/i.test(val);
-    if (val === 'p' || val ==='a') {
+    if (/[a|p]$/i.test(val)) {
       val += "m";
     }
     // let moment.js figure out what they said
