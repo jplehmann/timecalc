@@ -13,15 +13,70 @@ define(["jquery", "knockout", "moment"], function($, ko) {
     self.removeRow = function(row) {
         self.row.remove(row);
     };
+    self.grandTotal = ko.computed(function () {
+      var total = 0;
+      self.rows().forEach(function (x) {
+        // assume it's an hour total
+        // ignore if blank, NaN, undefined, etc. (or 0)
+        if (x.rowTotal()) {
+          total += parseFloat(x.rowTotal());
+        }
+      });
+      return total;
+    });
   };
 
-  var TimeSheetRow = function(timeIn, timeOut, breakLen) {
+  var TimeSheetRow = function (timeIn, timeOut, breakLen) {
     var self = this;
-    this.timeIn = ko.observable(timeIn);
-    this.timeOut = ko.observable(timeOut);
+    console.log("here");
+    // underlying data storage must be observable
+    this._timeIn = ko.observable();
+    this._timeInVal = 0;
+    // TODO: make this a class so we only have it once
+    this.timeIn = ko.computed({
+      read: function() { 
+        // why does this get called immediately?
+        console.log("read -> " + self._timeIn());
+        return self._timeIn(); 
+      },
+      write: function(value) {
+        console.log("writing with " + value);
+        var t1a = parseTime(value);
+        if (t1a === undefined) {
+          self._timeIn("");
+        } else {
+          self._timeIn(t1a[1]);
+          self._timeInVal = t1a[0];
+        }
+        console.log("  wrote with " + self._timeIn());
+      } 
+    });
+    console.log("input: " + timeIn);
+    // initialize
+    this.timeIn(timeIn);
+    this._timeOut = ko.observable();
+    this.timeOut = ko.computed({
+      read: function() { 
+        // why does this get called immediately?
+        console.log("read -> " + self._timeOut());
+        return self._timeOut(); 
+      },
+      write: function(value) {
+        console.log("writing with " + value);
+        var t1a = parseTime(value, self._timeInVal);
+        if (t1a === undefined) {
+          self._timeOut("");
+        } else {
+          self._timeOut(t1a[1]);
+        }
+        console.log("  wrote with " + self._timeOut());
+      } 
+    });
+    this.timeOut(timeOut);
     this.breakLen = ko.observable(breakLen);
 
-    this.rowTotal = ko.computed(function() {
+    this.rowTotal = ko.computed(function () {
+      console.log("rowTotal got " + self.timeIn());
       var t1a = parseTime(self.timeIn());
       if (t1a === undefined) {
         return "";
@@ -216,6 +271,9 @@ define(["jquery", "knockout", "moment"], function($, ko) {
    *   computed and a string showing how we interpreted it
    */
   function parseTime(val, refTime) {
+    if (val === undefined) {
+      return undefined;
+    }
     // doesn't parse 2p correctly so add a 'm' if we detect this
     var meridiem = /[a|p]m?$/i.test(val);
     if (/[a|p]$/i.test(val)) {
