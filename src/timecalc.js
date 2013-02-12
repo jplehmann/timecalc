@@ -22,7 +22,7 @@ define(["jquery", "knockout", "moment"], function($, ko) {
           total += parseFloat(x.rowTotal());
         }
       });
-      return total;
+      return total.toFixed(HOUR_PRECISION);
     });
   };
 
@@ -98,7 +98,7 @@ define(["jquery", "knockout", "moment"], function($, ko) {
       }
       var blen = parseFloat(self.breakLen()) || 0;
       //console.log("ti: " + t1a[0] + ", to: " + t2a[0]);
-      return t2a[0] - t1a[0] - blen;
+      return (t2a[0] - t1a[0] - blen).toFixed(HOUR_PRECISION);
     });
   };
  
@@ -115,7 +115,7 @@ define(["jquery", "knockout", "moment"], function($, ko) {
   function init() {
     focusOnFirst();
     //clearAndInit();
-    //selectAllOnClick();
+    selectAllOnClick();
     //updateTotalsOnBlur();
     enterAdvancesField();
     //clearButton();
@@ -140,22 +140,6 @@ define(["jquery", "knockout", "moment"], function($, ko) {
       $(this).removeClass('error');
     });
     updateTotalColumn();
-  }
-
-  /**
-   * When leaving a cell, update the totals
-   */
-  function updateTotalsOnBlur() {
-    $("input").blur(function (event) {
-      var $curRow = $(event.target).parents('tr').first(),
-        rowTotal = updateRow($curRow);
-      //console.log("row = " + $('.main-table tr').index($curRow));
-      updateTotalColumn();
-      // if the last row is filled out, add another row
-      if (rowTotal !== "" && lastRow().get(0) === $curRow.get(0)) {
-        addRow();
-      }
-    });
   }
 
   /**
@@ -316,18 +300,6 @@ define(["jquery", "knockout", "moment"], function($, ko) {
     // pass back the interpreted value, how we understood it
     var interpVal = m.format("h:mma");
     return [fval, interpVal];
-  }
-
-  /**
-   * Add across the totals column.
-   */
-  function updateTotalColumn() {
-    // "get" gets the array behind the jquery object
-    var arr = $('.day-total').map(function () {
-      return $(this).text();
-    }).get(),
-    total = addTimes(arr);
-    $('.week-total').text(total.toFixed(HOUR_PRECISION));
   }
 
   /**
