@@ -26,14 +26,18 @@ define(["jquery", "knockout", "moment"], function($, ko) {
     });
   };
 
-  var TimeSheetRow = function (timeIn, timeOut, breakLen) {
+  // TODO: this needs to be used to create a NEW object which
+  // stores its own internal data rather than storing that in self
+  function InputTime(val) {
+    // TODO: dont rely on this
     var self = this;
-    console.log("here");
-    // underlying data storage must be observable
-    this._timeIn = ko.observable();
-    this._timeInVal = 0;
-    // TODO: make this a class so we only have it once
-    this.timeIn = ko.computed({
+    // TODO: how does this work exactly? we create a new object
+    // and set some members on it then return a closure which
+    // can refernce those privileged.  Are we leaking the original
+    // object since we can't directly reference it?
+    self._timeIn = ko.observable();
+    self._timeInVal = 0;
+    return ko.computed({
       read: function() { 
         // why does this get called immediately?
         console.log("read -> " + self._timeIn());
@@ -51,6 +55,13 @@ define(["jquery", "knockout", "moment"], function($, ko) {
         console.log("  wrote with " + self._timeIn());
       } 
     });
+  }
+
+  var TimeSheetRow = function (timeIn, timeOut, breakLen) {
+    var self = this;
+    console.log("here");
+    // underlying data storage must be observable
+    this.timeIn = new InputTime(self);
     console.log("input: " + timeIn);
     // initialize
     this.timeIn(timeIn);
