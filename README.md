@@ -21,13 +21,15 @@ In the future I plan to try out:
 Todo
 ----
 * Knockout conversion
-  * rows: 3 inputs + total
-  * parse & update values after they're entered
-  * grand total
-  * init to 3 rows and add new ones
-  * clear button
-  * validation / error display
-  * move parseTime, etc into utility file
+  x rows: 3 inputs + total
+  x parse & update values after they're entered
+  o make timein/out be a class
+  x grand total
+  x init to 3 rows 
+  o detect when to add new rows
+  o clear button
+  o validation / error display
+  o move parseTime, etc into utility file
 
 Features Todo
 -------------
