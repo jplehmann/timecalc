@@ -4,7 +4,10 @@
 define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
   'use strict';
 
-  var TimeSheetModel = function(rows) {
+  /**
+   * The entire model.
+   */
+  function TimeSheetModel(rows) {
     var self = this;
     self.rows = ko.observableArray(rows);
     self.addRow = function() {
@@ -26,81 +29,66 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     });
   };
 
-  // TODO: this needs to be used to create a NEW object which
-  // stores its own internal data rather than storing that in self
-  function InputTime(val) {
-    // TODO: dont rely on this
-    var self = this;
-    // TODO: how does this work exactly? we create a new object
-    // and set some members on it then return a closure which
-    // can refernce those privileged.  Are we leaking the original
-    // object since we can't directly reference it?
-    self._timeIn = ko.observable();
-    self._timeInVal = 0;
-    return ko.computed({
-      read: function() { 
-        // why does this get called immediately?
-        console.log("read -> " + self._timeIn());
-        return self._timeIn(); 
-      },
-      write: function(value) {
-        console.log("writing with " + value);
-        var t1a = util.parseTime(value);
-        if (t1a === undefined) {
-          self._timeIn("");
-        } else {
-          self._timeIn(t1a[1]);
-          self._timeInVal = t1a[0];
-        }
-        console.log("  wrote with " + self._timeIn());
-      } 
-    });
-  }
-
-  var TimeSheetRow = function (timeIn, timeOut, breakLen) {
+  /**
+   * A single row.
+   */
+  function TimeSheetRow(timeIn, timeOut, breakLen) {
     var self = this;
     console.log("here");
     // underlying data storage must be observable
-    this.timeIn = new InputTime(self);
+    // PROBLEM: I need these guys to be ko observables, but
+    // they also need to have other stuff
+    var t1 = new InputTime(timeIn);
+    this.timeIn = t1.computed;
+    var t2 = new InputTime(timeOut, t1.val);
+    this.timeOut = t2.computed;
+    this.breakLen = ko.observable(breakLen);
+
     console.log("input: " + timeIn);
-    // initialize
-    this.timeIn(timeIn);
-    this._timeOut = ko.observable();
-    this.timeOut = ko.computed({
+    console.log("input': " + this.timeIn());
+    console.log("val': " + t1.val);
+
+    this.rowTotal = ko.computed(function () {
+      console.log("rowTotal got " + t1.val + "," + t2.val);
+      var blen = parseFloat(self.breakLen()) || 0;
+      return (t2.val - t1.val - blen).toFixed(HOUR_PRECISION);
+    });
+  };
+
+  // TODO: this needs to be used to create a NEW object which
+  // stores its own internal data rather than storing that in self
+  /**
+   * A single cell.
+   */
+  function InputTime(time, refTime) {
+    var self = this;
+    this._raw = ko.observable(time);
+    this.val = 0;
+    this.refTime = refTime;
+    this.computed = ko.computed({
       read: function() { 
         // why does this get called immediately?
-        console.log("read -> " + self._timeOut());
-        return self._timeOut(); 
+        console.log("read -> " + self._raw());
+        return self._raw(); 
       },
       write: function(value) {
         console.log("writing with " + value);
-        var t1a = util.parseTime(value, self._timeInVal);
+        // XXX: do I need to use self over this, and do I need it at all?
+        // yes, because it's on the object and yes because I'm guessing
+        // this computed method runs long after "this" has changed.
+        var t1a = util.parseTime(value, self.refTime);
         if (t1a === undefined) {
-          self._timeOut("");
+          self._raw("");
         } else {
-          self._timeOut(t1a[1]);
+          self._raw(t1a[1]);
+          self.val = t1a[0];
         }
-        console.log("  wrote with " + self._timeOut());
+        console.log("  wrote with " + self._raw());
       } 
     });
-    this.timeOut(timeOut);
-    this.breakLen = ko.observable(breakLen);
-
-    this.rowTotal = ko.computed(function () {
-      console.log("rowTotal got " + self.timeIn());
-      var t1a = util.parseTime(self.timeIn());
-      if (t1a === undefined) {
-        return "";
-      }
-      var t2a = util.parseTime(self.timeOut(), t1a[0]);
-      if (t2a === undefined) {
-        return "";
-      }
-      var blen = parseFloat(self.breakLen()) || 0;
-      //console.log("ti: " + t1a[0] + ", to: " + t2a[0]);
-      return (t2a[0] - t1a[0] - blen).toFixed(HOUR_PRECISION);
-    });
-  };
+    this.computed(time);
+  }
+    
  
   var viewModel = new TimeSheetModel([
       new TimeSheetRow("9am", "5pm", "0.25"),
