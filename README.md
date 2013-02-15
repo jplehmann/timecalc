@@ -23,11 +23,14 @@ Todo
 * Knockout conversion
   x rows: 3 inputs + total
   x parse & update values after they're entered
-  o make timein/out be a class
+  x make timein/out be a class
   x grand total
   x init to 3 rows 
-  o detect when to add new rows
   o clear button
+    - how do I wire up a button?
+  o detect when to add new rows
+    - need to add new row in Row class, but can't check if I'm the last row
+      because I can't access the view model
   o validation / error display
   o move parseTime, etc into utility file
 
