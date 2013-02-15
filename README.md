@@ -26,13 +26,13 @@ Todo
   x make timein/out be a class
   x grand total
   x init to 3 rows 
-  o clear button
-    - how do I wire up a button?
-  o detect when to add new rows
-    - need to add new row in Row class, but can't check if I'm the last row
-      because I can't access the view model
-  o validation / error display
-  o move parseTime, etc into utility file
+  x FIX: doesn't change when u enter same numbe
+  x clear button
+  x detect when to add new rows
+  x error display for negative totals
+  x move parseTime, etc into utility file
+  o more validation
+  line count: 243 before, 237 now!!!
 
 Features Todo
 -------------

@@ -29,7 +29,7 @@ define(["src/timecalc"], function(timecalc) {
       });
   });
 
-  describe("Time Input", function() {
+  xdescribe("Time Input", function() {
       // is there a better way than having to create my own object
       // with a stub function?
       var mockInput = { val : function() { } }; 
