@@ -4,8 +4,10 @@
 define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
   'use strict';
 
+  var HOUR_PRECISION = 2;
+
   /**
-   * The entire model.
+   * The entire model which primarily is represented by TimeSheetRows.
    */
   function TimeSheetModel(rows) {
     var self = this;
@@ -36,7 +38,6 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     };
     // XXX: should this be inside this class or outside?
     self.init = function () {
-      console.log("calling init");
       self.rows.removeAll();
       // TODO: how to pass this in at once?
       self.rows.push(new TimeSheetRow("9am", "5pm", "0.25"));
@@ -48,11 +49,10 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
   };
 
   /**
-   * A single row.
+   * A single row: two InputTimes, a break time and total.
    */
   function TimeSheetRow(timeIn, timeOut, breakLen) {
     var self = this;
-    console.log("here");
     // underlying data storage must be observable
     // PROBLEM: I need these guys to be ko observables, but
     // they also need to have other stuff
@@ -69,7 +69,6 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
       if (self.timeIn() === "" || self.timeOut() === "") {
         return "";
       }
-      console.log("rowTotal got " + t1.val + "," + t2.val);
       var blen = parseFloat(self.breakLen()) || 0;
       var total = (t2.val - t1.val - blen).toFixed(HOUR_PRECISION);
       return total;
@@ -90,35 +89,44 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
   // stores its own internal data rather than storing that in self
   // ??? what does this mean?
   /**
-   * A single cell.
+   * A single cell representing a time.
    */
   function InputTime(time, refTime) {
+    var self = this;
+    // used because we are immediately updating the cell after the user types
+    // something in. with this we can cause the field to be updated because the
+    // computed field is observing the _raw field. (e.g., computed.write() ->
+    // _raw.write() -> computed.read() )
+    this._raw = ko.observable(time);
     // we store some pre-computed values alongside the ko computed
     // observable. an alternative design would be to store those values
     // within the observable, which would be "cleaner" perhaps?
-    var self = this;
-    this._raw = ko.observable(time);
     this.val = 0;
     this.refTime = refTime;
+    // this is the value bound to the input
     this.computed = ko.computed({
       read: function() { 
         // why does this get called immediately?
-        console.log("read -> " + self._raw());
         return self._raw(); 
       },
       write: function(value) {
-        console.log("writing with " + value);
+        // if they typed in the same number, then we set _raw to 
+        // the same value it currently is, and then the UI doesn't update (e.g.
+        // it's 3:00pm and they type '3' so it just stays as 3). To get around
+        // this we set _raw temporarily to exactly what they typed in.
+        self._raw(value);
         // XXX: do I need to use self over this, and do I need it at all?
         // yes, because it's on the object and yes because I'm guessing
-        // this computed method runs long after "this" has changed.
+        // this computed method runs long after "this" has changed. OTOH, 
+        // I could set owner:this to use 'this' instead.
         var t1a = util.parseTime(value, self.refTime);
         if (t1a === undefined) {
           self._raw("");
         } else {
-          self._raw(t1a[1]);
+          // update the value FIRST, then the raw, to trigger a total update
           self.val = t1a[0];
+          self._raw(t1a[1]);
         }
-        console.log("  wrote with " + self._raw());
       } 
     });
     this.computed(time);
@@ -128,27 +136,17 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
   }
     
   var viewModel = new TimeSheetModel();
-
+  // better to initialize self like this?
+  viewModel.init();
+  
   ko.applyBindings(viewModel);
 
-  viewModel.init();
-
-  var HOUR_PRECISION = 2;
-
-  function init() {
-    //focusOnFirst(true);
-    //clearAndInit();
-    //selectAllOnClick();
-    //updateTotalsOnBlur();
-    //enterAdvancesField();
-    //clearButton();
-    // add a couple extra rows in the beginning to have 3 total
-    //addRow();
-    //addRow();
-  }
-
+  /** 
+   * Auto-focus on the first input.
+   */
   function focusOnFirst(doSelect) {
-    // auto-focus on the first input
+    // the total shows up in HTML before the days so we must
+    // filter the selection
     var item = $('.day input:visible:first').first().focus();
     if (doSelect === true) {
       item.select();
@@ -156,20 +154,7 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
   }
 
   /**
-   * For initializing and/or clearing the table.
-   */
-  function clearAndInit() {
-    // XXX: does each return objects?  how can i wrap them
-    $('.main-table tr.day').each(function () {
-      clearRow(this);
-      $(this).removeClass('error');
-    });
-    updateTotalColumn();
-    focusOnFirst(true);
-  }
-
-  /**
-   * "Enter" should go to the next input field like tab
+   * "Enter" should go to the next input field like tab.
    */
   function enterAdvancesField() {
     $("input").bind('keypress', function (event) {
@@ -181,103 +166,7 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     });
   }
 
-  /**
-   * Setup clear button action
-   */
-  function clearButton() {
-    $('td.clear-button').click(function (event) {
-      //location.reload();
-      //clearAndInit();
-      viewModel.addRow();
-    });
-  }
-
-  /**
-   * Returns the JQuery object for last 'day' row.
-   */
-  function lastRow() {
-    return $('.main-table tr.day').last();
-  }
-
-  /**
-   * Creates a new row by cloning the last row and clearing it.
-   */
-  function addRow() {
-    var $newRow = lastRow().clone(true).insertAfter(lastRow());
-    clearRow($newRow.get());
-  }
-
-  /**
- * Takes a row object (not selector) and resets values.
-   */
-  function clearRow(curRow) {
-    $(curRow).find('input').val("");
-    $(curRow).find('.day-total').text("");
-  }
-
-  /**
-   * Recompute hours for a row.
-   * @param $curRow is the 'tr'
-   * @return the total
-   */
-  function updateRow($curRow) {
-  var totalTime = computeRow($curRow);
-    if (totalTime === undefined) {
-      totalTime = "";
-    } else {
-      totalTime = totalTime.toFixed(HOUR_PRECISION);
-    }
-    $curRow.find(".day-total").text(totalTime);
-    if (totalTime < 0) {
-      $curRow.addClass('error');
-    } else {
-      $curRow.removeClass('error');
-    }
-    return totalTime;
-  }
-
-  /**
-   * Using values in current row, compute hours worked.
-   * @return undefined if not valid input.
-   */
-  function computeRow($curRow) {
-    // get A B and C, and parse
-    var $inputs = $curRow.find('input'),
-      timeIn = updateInputIfValid($inputs.eq(0)),
-      timeOut = updateInputIfValid($inputs.eq(1), timeIn);
-    if (timeIn === undefined || timeOut === undefined) {
-      return undefined;
-    }
-
-    var breakLen = parseFloat($inputs.eq(2).val()) || 0;
-    // clear out the break field if set to 0 so it's clear
-    // that we didn't use it
-    if (breakLen === 0) {
-      $inputs.eq(2).val("");
-    }
-    //console.log("ti: " + timeIn + ", to: " + timeOut);
-    return timeOut - timeIn - breakLen;
-  }
-
-  /**
-   * Parses the time then updates the field with how it was interpreted,
-   * if it was able to be parsed.
-   * @return undefined if not valid input.
-   */
-  function updateInputIfValid($input, refTime) {
-    var timeArr = util.parseTime($input.val(), refTime);
-    if (timeArr === undefined) {
-      return undefined;
-    } else {
-      $input.val(timeArr[1]);
-    }
-    return timeArr[0];
-  }
-
   return {
-    // XXX: this doesn't do anyting now, but I could pass the other init
-    init: init, 
-    updateInputIfValid: updateInputIfValid, 
     parseTime: util.parseTime,
     addTimes: util.addTimes
   };
