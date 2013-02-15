@@ -25,7 +25,8 @@
           <tfoot>
             <tr class="total">
               <td class="clear-button" colspan="1">
-                <input type="button" class="btn-small btn" value="clear">
+                <input type="button" class="btn-small btn" 
+                       value="clear" data-bind='click:clearClick'>
               </td>
               <td></td>
               <td class="total-label">Total</td>
@@ -34,9 +35,12 @@
           </tfoot>
           <tbody data-bind='foreach: rows'>
             <tr class="day">
-                <td><input class='required' data-bind='value:timeIn'></td>
-                <td><input class='required' data-bind='value:timeOut'></td>
-                <td><input class='number' data-bind='value:breakLen'></td>
+                <td><input class='required' 
+                           data-bind='value:timeIn, click:cellClick, event:{blur:cellBlur}'></td>
+                <td><input class='required' 
+                           data-bind='value:timeOut, click:cellClick, event:{blur:cellBlur}'></td>
+                <td><input class='number' 
+                           data-bind='value:breakLen, click:cellClick, event:{blur:cellBlur}'></td>
                 <td><div class="day-total" data-bind='text:rowTotal'></div></td>
             </tr>
           </tbody>

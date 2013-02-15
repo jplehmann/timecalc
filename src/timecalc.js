@@ -9,13 +9,16 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
    */
   function TimeSheetModel(rows) {
     var self = this;
-    self.rows = ko.observableArray(rows);
-    self.addRow = function() {
+    self.rows = ko.observableArray();
+    self.addRow = function(row) {
       self.rows.push(new TimeSheetRow("", "", ""));
     };
     self.removeRow = function(row) {
         self.row.remove(row);
     };
+    self.getLastRow = function() {
+      return self.rows()[self.rows().length-1];
+    }
     self.grandTotal = ko.computed(function () {
       var total = 0;
       self.rows().forEach(function (x) {
@@ -27,6 +30,21 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
       });
       return total.toFixed(HOUR_PRECISION);
     });
+    self.clearClick = function () {
+      // reinitialize
+      self.init();
+    };
+    // XXX: should this be inside this class or outside?
+    self.init = function () {
+      console.log("calling init");
+      self.rows.removeAll();
+      // TODO: how to pass this in at once?
+      self.rows.push(new TimeSheetRow("9am", "5pm", "0.25"));
+      self.rows.push(new TimeSheetRow("9am", "5pm", "0.25"));
+      self.rows.push(new TimeSheetRow("", "", ""));
+      focusOnFirst(true);
+      enterAdvancesField();
+    };
   };
 
   /**
@@ -44,23 +62,40 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     this.timeOut = t2.computed;
     this.breakLen = ko.observable(breakLen);
 
-    console.log("input: " + timeIn);
-    console.log("input': " + this.timeIn());
-    console.log("val': " + t1.val);
-
     this.rowTotal = ko.computed(function () {
+      // we have to reference timeIn and timeOut just to create a dependency
+      // upon them, even though we are actually going to pull values from the
+      // underlying, pre-parsed value
+      if (self.timeIn() === "" || self.timeOut() === "") {
+        return "";
+      }
       console.log("rowTotal got " + t1.val + "," + t2.val);
       var blen = parseFloat(self.breakLen()) || 0;
-      return (t2.val - t1.val - blen).toFixed(HOUR_PRECISION);
+      var total = (t2.val - t1.val - blen).toFixed(HOUR_PRECISION);
+      return total;
     });
+    this.cellClick = function (data, event) {
+      event.target.select();
+    };
+    this.cellBlur = function (data, event) {
+      // add row if the last row has a non-empty total
+      if (viewModel !== undefined && self === viewModel.getLastRow() && 
+          self.rowTotal() !== "") {
+        viewModel.addRow();
+      }
+    }
   };
 
   // TODO: this needs to be used to create a NEW object which
   // stores its own internal data rather than storing that in self
+  // ??? what does this mean?
   /**
    * A single cell.
    */
   function InputTime(time, refTime) {
+    // we store some pre-computed values alongside the ko computed
+    // observable. an alternative design would be to store those values
+    // within the observable, which would be "cleaner" perhaps?
     var self = this;
     this._raw = ko.observable(time);
     this.val = 0;
@@ -87,57 +122,50 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
       } 
     });
     this.computed(time);
+    // XXX: why does this break things? I thought this would be the
+    // default beahvior
+    //return this;
   }
     
- 
-  var viewModel = new TimeSheetModel([
-      new TimeSheetRow("9am", "5pm", "0.25"),
-      new TimeSheetRow("9am", "5pm", "0.25"),
-      new TimeSheetRow("", "", "")
-  ]);
+  var viewModel = new TimeSheetModel();
 
   ko.applyBindings(viewModel);
+
+  viewModel.init();
 
   var HOUR_PRECISION = 2;
 
   function init() {
-    focusOnFirst();
+    //focusOnFirst(true);
     //clearAndInit();
-    selectAllOnClick();
+    //selectAllOnClick();
     //updateTotalsOnBlur();
-    enterAdvancesField();
+    //enterAdvancesField();
     //clearButton();
     // add a couple extra rows in the beginning to have 3 total
     //addRow();
     //addRow();
   }
 
-  function focusOnFirst() {
+  function focusOnFirst(doSelect) {
     // auto-focus on the first input
-    $('.day input:visible:first').first().focus();
+    var item = $('.day input:visible:first').first().focus();
+    if (doSelect === true) {
+      item.select();
+    }
   }
 
   /**
-   * For initializing and/or clearing the table
+   * For initializing and/or clearing the table.
    */
   function clearAndInit() {
-    focusOnFirst();
     // XXX: does each return objects?  how can i wrap them
     $('.main-table tr.day').each(function () {
       clearRow(this);
       $(this).removeClass('error');
     });
     updateTotalColumn();
-  }
-
-  /**
-   * Clicking on an input will select all so as to replace
-   * the value by default
-   */
-  function selectAllOnClick() {
-    $('input').click(function () {
-      $(this).select();
-    });
+    focusOnFirst(true);
   }
 
   /**
@@ -159,7 +187,8 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
   function clearButton() {
     $('td.clear-button').click(function (event) {
       //location.reload();
-      clearAndInit();
+      //clearAndInit();
+      viewModel.addRow();
     });
   }
 
@@ -246,6 +275,7 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
   }
 
   return {
+    // XXX: this doesn't do anyting now, but I could pass the other init
     init: init, 
     updateInputIfValid: updateInputIfValid, 
     parseTime: util.parseTime,
