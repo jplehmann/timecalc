@@ -6,11 +6,17 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
 
   var HOUR_PRECISION = 2;
 
+  // create model and initialize
+  var viewModel = new TimeSheetModel();
+  ko.applyBindings(viewModel);
+  viewModel.init();
+
   /**
-   * The entire model which primarily is represented by TimeSheetRows.
+   * The entire model, which primarily is represented by TimeSheetRows.
    */
   function TimeSheetModel(rows) {
     var self = this;
+    // rows in the timesheet table
     self.rows = ko.observableArray();
     self.addRow = function(row) {
       self.rows.push(new TimeSheetRow("", "", ""));
@@ -24,7 +30,6 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     self.grandTotal = ko.computed(function () {
       var total = 0;
       self.rows().forEach(function (x) {
-        // assume it's an hour total
         // ignore if blank, NaN, undefined, etc. (or 0)
         if (x.rowTotal()) {
           total += parseFloat(x.rowTotal());
@@ -33,18 +38,15 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
       return total.toFixed(HOUR_PRECISION);
     });
     self.clearClick = function () {
-      // reinitialize
       self.init();
     };
-    // XXX: should this be inside this class or outside?
     self.init = function () {
       self.rows.removeAll();
-      // TODO: how to pass this in at once?
-      self.rows.push(new TimeSheetRow("9am", "5pm", "0.25"));
-      self.rows.push(new TimeSheetRow("9am", "5pm", "0.25"));
-      self.rows.push(new TimeSheetRow("", "", ""));
+      self.addRow();
+      self.addRow();
+      self.addRow();
       focusOnFirst(true);
-      enterAdvancesField();
+      onEnterAdvanceFocus();
     };
   };
 
@@ -53,15 +55,13 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
    */
   function TimeSheetRow(timeIn, timeOut, breakLen) {
     var self = this;
-    // underlying data storage must be observable
-    // PROBLEM: I need these guys to be ko observables, but
-    // they also need to have other stuff
+    // objects holding all data for time in and time out
     var t1 = new InputTime(timeIn);
+    var t2 = new InputTime(timeOut, t1);
+    // visible reference to underlying observable
     this.timeIn = t1.computed;
-    var t2 = new InputTime(timeOut, t1.val);
     this.timeOut = t2.computed;
     this.breakLen = ko.observable(breakLen);
-
     this.rowTotal = ko.computed(function () {
       // we have to reference timeIn and timeOut just to create a dependency
       // upon them, even though we are actually going to pull values from the
@@ -85,41 +85,39 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     }
   };
 
-  // TODO: this needs to be used to create a NEW object which
-  // stores its own internal data rather than storing that in self
-  // ??? what does this mean?
   /**
-   * A single cell representing a time.
+   * A single cell representing a time. Holds the observable which is in the
+   * view as well as the parsed value.
    */
-  function InputTime(time, refTime) {
+  function InputTime(time, refInputTime) {
     var self = this;
-    // used because we are immediately updating the cell after the user types
-    // something in. with this we can cause the field to be updated because the
-    // computed field is observing the _raw field. (e.g., computed.write() ->
-    // _raw.write() -> computed.read() )
-    this._raw = ko.observable(time);
-    // we store some pre-computed values alongside the ko computed
-    // observable. an alternative design would be to store those values
-    // within the observable, which would be "cleaner" perhaps?
+    // we store some values alongside ko's computed observable. 
+    // an alternative design would be to store those values
+    // within the observable. XXX: which is cleaner?
     this.val = 0;
-    this.refTime = refTime;
-    // this is the value bound to the input
+    // reference the input time (if any) so that we can check its value
+    // to make inferences about this time
+    this.refInputTime = refInputTime;
+    // value bound to the input. 
     this.computed = ko.computed({
       read: function() { 
         // why does this get called immediately?
         return self._raw(); 
       },
+      // when user types in text, we parse it and update our model
       write: function(value) {
-        // if they typed in the same number, then we set _raw to 
-        // the same value it currently is, and then the UI doesn't update (e.g.
-        // it's 3:00pm and they type '3' so it just stays as 3). To get around
-        // this we set _raw temporarily to exactly what they typed in.
+        // in order to parse the user's input then update the value in that
+        // same field (e.g. 3 -> 3pm) we store updated value in another field
+        // called '_raw'. 
+        // (e.g., computed.write() -> _raw.write() -> computed.read() )
+        // There's a problem though if they type in the same
+        // time (e.g. it's 3:00pm and they type '3' so it just stays as 3 because
+        // this callback isn't triggered). To get around this we set _raw
+        // temporarily to exactly what they typed in.
         self._raw(value);
-        // XXX: do I need to use self over this, and do I need it at all?
-        // yes, because it's on the object and yes because I'm guessing
-        // this computed method runs long after "this" has changed. OTOH, 
-        // I could set owner:this to use 'this' instead.
-        var t1a = util.parseTime(value, self.refTime);
+        // extract the value of refTime if defined
+        var refTime = self.refInputTime && self.refInputTime.val
+        var t1a = util.parseTime(value, refTime);
         if (t1a === undefined) {
           self._raw("");
         } else {
@@ -129,18 +127,10 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
         }
       } 
     });
+    this._raw = ko.observable(time);
     this.computed(time);
-    // XXX: why does this break things? I thought this would be the
-    // default beahvior
-    //return this;
   }
     
-  var viewModel = new TimeSheetModel();
-  // better to initialize self like this?
-  viewModel.init();
-  
-  ko.applyBindings(viewModel);
-
   /** 
    * Auto-focus on the first input.
    */
@@ -156,7 +146,7 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
   /**
    * "Enter" should go to the next input field like tab.
    */
-  function enterAdvancesField() {
+  function onEnterAdvanceFocus() {
     $("input").bind('keypress', function (event) {
       if (event.keyCode === 13) {
         var $set = $('input'),
