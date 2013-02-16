@@ -3,6 +3,7 @@ TimeCalc
 A simple timesheet calculator for adding up hours worked.  You can see a live version here: http://timecalc.herokuapp.com
 
 I designed this to have a small app to tinker with JavaScript and related technologies. So far it incorporates: 
+* [Knockout] and for movel view-viewmodel binding
 * [JQuery] for UI behavior
 * [Bootstrap] for styling
 * [Moment] for time parsing
@@ -13,7 +14,6 @@ I designed this to have a small app to tinker with JavaScript and related techno
 In the future I plan to try out:
 * convert to objects
 * [Cucumber] acceptance testing
-* [Knockout] for UI interactions
 * [Mustache] templating
 * [LESS] for CSS (or Sass Compass)
 * [Underscore] or Lo-Dash for functional constructs
@@ -41,6 +41,20 @@ Features Todo
 * should leave break times there, normalized??
 * Should allow checkbox to round to nearest .25
 * times like "900"
+
+Specific Features:
+------------------
+* [Knockout] and for movel view-viewmodel binding
+  * typical binding to observables (cells), computed observables (cells) and
+    observable arrays (rows)
+  * event binding for click button and blur events
+  * declarative CSS behavior for validation of row totals
+* [JQuery] for UI behavior
+* [Bootstrap] for styling
+* [Moment] for time parsing
+* [Require] for modular script loading
+* [Jasmine] for BDD specification tests
+* [Heroku] for hosting using a thin Ruby [Rack] layer
 
 Questions
 ---------
