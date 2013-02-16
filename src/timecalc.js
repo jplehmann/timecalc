@@ -98,6 +98,8 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     // reference the input time (if any) so that we can check its value
     // to make inferences about this time
     this.refInputTime = refInputTime;
+    // used for trick documented below
+    this._raw = ko.observable(time);
     // value bound to the input. 
     this.computed = ko.computed({
       read: function() { 
@@ -127,7 +129,6 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
         }
       } 
     });
-    this._raw = ko.observable(time);
     this.computed(time);
   }
     
