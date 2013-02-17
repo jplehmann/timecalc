@@ -14,15 +14,12 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
   /**
    * The entire model, which primarily is represented by TimeSheetRows.
    */
-  function TimeSheetModel(rows) {
+  function TimeSheetModel() {
     var self = this;
     // rows in the timesheet table
     self.rows = ko.observableArray();
-    self.addRow = function(row) {
+    self.addRow = function() {
       self.rows.push(new TimeSheetRow("", "", ""));
-    };
-    self.removeRow = function(row) {
-        self.row.remove(row);
     };
     self.getLastRow = function() {
       return self.rows()[self.rows().length-1];
@@ -48,6 +45,7 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
       focusOnFirst(true);
       onEnterAdvanceFocus();
     };
+    //self.init();
   };
 
   /**
@@ -59,10 +57,10 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     var t1 = new InputTime(timeIn);
     var t2 = new InputTime(timeOut, t1);
     // visible reference to underlying observable
-    this.timeIn = t1.computed;
-    this.timeOut = t2.computed;
-    this.breakLen = ko.observable(breakLen);
-    this.rowTotal = ko.computed(function () {
+    self.timeIn = t1.computed;
+    self.timeOut = t2.computed;
+    self.breakLen = ko.observable(breakLen);
+    self.rowTotal = ko.computed(function () {
       // we have to reference timeIn and timeOut just to create a dependency
       // upon them, even though we are actually going to pull values from the
       // underlying, pre-parsed value
@@ -73,10 +71,10 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
       var total = (t2.val - t1.val - blen).toFixed(HOUR_PRECISION);
       return total;
     });
-    this.cellClick = function (data, event) {
+    self.cellClick = function (data, event) {
       event.target.select();
     };
-    this.cellBlur = function (data, event) {
+    self.cellBlur = function (data, event) {
       // add row if the last row has a non-empty total
       if (viewModel !== undefined && self === viewModel.getLastRow() && 
           self.rowTotal() !== "") {
@@ -94,16 +92,15 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     // we store some values alongside ko's computed observable. 
     // an alternative design would be to store those values
     // within the observable. XXX: which is cleaner?
-    this.val = 0;
+    self.val = 0;
     // reference the input time (if any) so that we can check its value
     // to make inferences about this time
-    this.refInputTime = refInputTime;
+    self.refInputTime = refInputTime;
     // used for trick documented below
-    this._raw = ko.observable(time);
+    self._raw = ko.observable(time);
     // value bound to the input. 
-    this.computed = ko.computed({
+    self.computed = ko.computed({
       read: function() { 
-        // why does this get called immediately?
         return self._raw(); 
       },
       // when user types in text, we parse it and update our model
@@ -129,7 +126,7 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
         }
       } 
     });
-    this.computed(time);
+    self.computed(time);
   }
     
   /** 
