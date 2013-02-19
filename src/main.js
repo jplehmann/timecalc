@@ -11,5 +11,4 @@ require.config({
 });
 
 require(["timecalc"], function(timecalc) {
-  timecalc.init();
 });
