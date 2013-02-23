@@ -10,7 +10,7 @@ I designed this to have a small app to tinker with JavaScript and related techno
 * [Jasmine] for BDD specification tests
 * [Heroku] for hosting using a thin Ruby [Rack] layer
 
-In the future I play to try out:
+In the future I plan to try out:
 * convert to objects
 * [Cucumber] acceptance testing
 * [Knockout] for UI interactions
