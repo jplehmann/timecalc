@@ -36,11 +36,14 @@ Todo
 
 Features Todo
 -------------
+* Dropdown to select rounding options (around at week-end or total)
+* date column on left where user enters first, and rest are inferred?
+* allow entering totals without times?
 * tool tips on headers with help
 * garbage times should not convert ("kjsdf" or "900")
 * should leave break times there, normalized??
-* Should allow checkbox to round to nearest .25
 * times like "900"
+* see bugs in issue tracker
 
 Specific Features:
 ------------------
