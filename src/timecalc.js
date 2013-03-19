@@ -6,16 +6,13 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
 
   var HOUR_PRECISION = 2;
 
-  // create model and initialize
-  var viewModel = new TimeSheetModel();
-  ko.applyBindings(viewModel);
-  viewModel.init();
-
   /**
    * The entire model, which primarily is represented by TimeSheetRows.
    */
-  function TimeSheetModel() {
-    var self = this;
+  function TimeSheetModel(options) {
+    var self = this,
+        _callback = options.callback;
+
     // rows in the timesheet table
     self.rows = ko.observableArray();
     self.addRow = function() {
@@ -45,7 +42,9 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
       focusOnFirst(true);
       onEnterAdvanceFocus();
     };
-    //self.init();
+    // perform bindings as 2nd to last step
+    _callback(self);
+    self.init();
   };
 
   /**
@@ -153,6 +152,11 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
       }
     });
   }
+
+  // create model and initialize
+  var viewModel = new TimeSheetModel({callback: function(c) { 
+    ko.applyBindings(c); 
+  }});
 
   return {
     parseTime: util.parseTime,
