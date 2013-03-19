@@ -158,8 +158,4 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     ko.applyBindings(c); 
   }});
 
-  return {
-    parseTime: util.parseTime,
-    addTimes: util.addTimes
-  };
 });
