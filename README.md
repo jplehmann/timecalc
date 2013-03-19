@@ -10,29 +10,15 @@ I designed this to have a small app to tinker with JavaScript and related techno
 * [Require] for modular script loading
 * [Jasmine] for BDD specification tests
 * [Heroku] for hosting using a thin Ruby [Rack] layer
+* [Underscore] for functional constructs
 
 In the future I plan to try out:
-* convert to objects
 * [Cucumber] acceptance testing
-* [Mustache] templating
-* [LESS] for CSS (or Sass Compass)
-* [Underscore] or Lo-Dash for functional constructs
+* [Mustache] templating (or Handlebars)
+* [LESS] for CSS (or SASS / Compass)
 
 Todo
 ----
-* Knockout conversion
-  x rows: 3 inputs + total
-  x parse & update values after they're entered
-  x make timein/out be a class
-  x grand total
-  x init to 3 rows 
-  x FIX: doesn't change when u enter same numbe
-  x clear button
-  x detect when to add new rows
-  x error display for negative totals
-  x move parseTime, etc into utility file
-  o more validation
-  line count: 243 before, 237 now!!!
 
 Features Todo
 -------------
@@ -61,28 +47,12 @@ Specific Features:
 
 Questions
 ---------
-- how to namespace with the IIFE and let jasmine see it?
-- consider using input type=time, number; what versions are supported?
-- JSLint
-  - why does it think else cannot come after return in a block? 172
-  - learn more about hoisting as to why vars have to be declared at once
-  - other stuff it didn't like
-    - slint src/timecalc.js  --maxerr=10000 --indent=2 --white --undef --sloppy
-    - doesn't like top down method definitions (using before defined)
-    - indent=2
-    - doesn't like my whitespace
-    - not using strict mode
-- CSSLint
-  - better to be more specific or general in selectors? / 
-    what are performance ramification of overqualifying? how did it know it's
-    overqualified, in case I had other elements with same class?
-- how to get code review on github?
-  - switch default branch to empty and remove everything
-  - create another branch to full and add all the code
-  - issue a pull request
+
 
 Stories Complete
 -----------------
+- conversion to Knockout
+- object oriented
 - should display 5 rows with 3 columns
 - should label rows: day 1, day 2, ...
 - should display 3 column headers: Time In, Time Out, Break Length
