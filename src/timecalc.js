@@ -97,7 +97,7 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     // to make inferences about this time
     self.refInputTime = refInputTime;
     // used for trick documented below
-    self._raw = ko.observable(time);
+    self._raw = ko.observable(time).extend({ notify: "always" });
     // value bound to the input. 
     self.computed = ko.computed({
       read: function() { 
@@ -113,7 +113,7 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
         // time (e.g. it's 3:00pm and they type '3' so it just stays as 3 because
         // this callback isn't triggered). To get around this we set _raw
         // temporarily to exactly what they typed in.
-        self._raw(value);
+        //self._raw(value);
         // extract the value of refTime if defined
         var refTime = self.refInputTime && self.refInputTime.val
         var t1a = util.parseTime(value, refTime);
