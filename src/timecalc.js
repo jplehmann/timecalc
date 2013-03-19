@@ -95,7 +95,13 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     // reference the input time (if any) so that we can check its value
     // to make inferences about this time
     self.refInputTime = refInputTime;
-    // used for trick documented below
+    // in order to parse the user's input then update the value in that
+    // same field (e.g. 3 -> 3pm) we store updated value in another field
+    // called '_raw'. 
+    // (e.g., computed.write() -> _raw.write() -> computed.read() )
+    // There's a problem though if they type in the same
+    // time (e.g. it's 3:00pm and they type '3' so it just stays as 3 because
+    // this callback isn't triggered). To get around this we set notify always.
     self._raw = ko.observable(time).extend({ notify: "always" });
     // value bound to the input. 
     self.computed = ko.computed({
@@ -104,15 +110,6 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
       },
       // when user types in text, we parse it and update our model
       write: function(value) {
-        // in order to parse the user's input then update the value in that
-        // same field (e.g. 3 -> 3pm) we store updated value in another field
-        // called '_raw'. 
-        // (e.g., computed.write() -> _raw.write() -> computed.read() )
-        // There's a problem though if they type in the same
-        // time (e.g. it's 3:00pm and they type '3' so it just stays as 3 because
-        // this callback isn't triggered). To get around this we set _raw
-        // temporarily to exactly what they typed in.
-        //self._raw(value);
         // extract the value of refTime if defined
         var refTime = self.refInputTime && self.refInputTime.val
         var t1a = util.parseTime(value, refTime);
