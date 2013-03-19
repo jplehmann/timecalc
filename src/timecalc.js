@@ -6,10 +6,33 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
 
   var HOUR_PRECISION = 2;
 
+// custom binding from the documentation (slightly different from built-in hasFocus)
+// http://knockoutjs.com/documentation/custom-bindings.html#modifying_observables_after_dom_events 
+ko.bindingHandlers.hasFocus = {
+  init: function(element, valueAccessor) {
+    $(element).focus(function() {
+      var value = valueAccessor();
+      value(true);
+    });
+    $(element).blur(function() {
+      var value = valueAccessor();
+      value(false);
+    });           
+  },
+  update: function(element, valueAccessor) {
+    var value = valueAccessor();
+    if (ko.utils.unwrapObservable(value)) {
+      element.focus();
+    } else {
+      element.blur();
+    }
+  }
+};
+
   // create model and initialize
   var viewModel = new TimeSheetModel();
   ko.applyBindings(viewModel);
-  viewModel.init();
+  //viewModel.init();
 
   /**
    * The entire model, which primarily is represented by TimeSheetRows.
@@ -18,8 +41,8 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     var self = this;
     // rows in the timesheet table
     self.rows = ko.observableArray();
-    self.addRow = function() {
-      self.rows.push(new TimeSheetRow("", "", ""));
+    self.addRow = function(grabFocus) {
+      self.rows.push(new TimeSheetRow("", "", "", grabFocus));
     };
     self.getLastRow = function() {
       return self.rows()[self.rows().length-1];
@@ -39,19 +62,20 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     };
     self.init = function () {
       self.rows.removeAll();
+      self.addRow(true /* grabFocus */);
       self.addRow();
       self.addRow();
-      self.addRow();
-      focusOnFirst(true);
-      onEnterAdvanceFocus();
     };
-    //self.init();
+
+    // model instance initialization
+    self.init();
+    liveOnEnterAdvanceFocus();
   };
 
   /**
    * A single row: two InputTimes, a break time and total.
    */
-  function TimeSheetRow(timeIn, timeOut, breakLen) {
+  function TimeSheetRow(timeIn, timeOut, breakLen, grabFocus) {
     var self = this;
     // objects holding all data for time in and time out
     var t1 = new InputTime(timeIn);
@@ -60,6 +84,7 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     self.timeIn = t1.computed;
     self.timeOut = t2.computed;
     self.breakLen = ko.observable(breakLen);
+    self.grabFocus = ko.observable(grabFocus);
     self.rowTotal = ko.computed(function () {
       // we have to reference timeIn and timeOut just to create a dependency
       // upon them, even though we are actually going to pull values from the
@@ -92,16 +117,22 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     // we store some values alongside ko's computed observable. 
     // an alternative design would be to store those values
     // within the observable. XXX: which is cleaner?
+    // I like this design ; It is similar to the ko extender pattern except InputTime is not an
+    // observable itself, but rather has a key explicit observable ('computed'); I think this way
+    // is nice & clear since it has multiple fields (val, refInputTime, computed)
     self.val = 0;
     // reference the input time (if any) so that we can check its value
     // to make inferences about this time
     self.refInputTime = refInputTime;
     // used for trick documented below
-    self._raw = ko.observable(time);
+    // writeable computed observables often have a "backing" observable like this
+    // that they use for storage; the wrapper computed just intercepts writes to
+    // handle parsing
+    self._raw = ko.observable(time).extend({ notify: "always" });
     // value bound to the input. 
     self.computed = ko.computed({
       read: function() { 
-        return self._raw(); 
+        return self._raw();
       },
       // when user types in text, we parse it and update our model
       write: function(value) {
@@ -113,7 +144,7 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
         // time (e.g. it's 3:00pm and they type '3' so it just stays as 3 because
         // this callback isn't triggered). To get around this we set _raw
         // temporarily to exactly what they typed in.
-        self._raw(value);
+        //self._raw(value);
         // extract the value of refTime if defined
         var refTime = self.refInputTime && self.refInputTime.val
         var t1a = util.parseTime(value, refTime);
@@ -124,6 +155,8 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
           self.val = t1a[0];
           self._raw(t1a[1]);
         }
+        // similar effect to extending _raw to { notify : "always" }
+        //self._raw.valueHasMutated()
       } 
     });
     self.computed(time);
@@ -141,6 +174,7 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
     }
   }
 
+  // one-shot version
   /**
    * "Enter" should go to the next input field like tab.
    */
@@ -149,6 +183,22 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
       if (event.keyCode === 13) {
         var $set = $('input'),
           $next = $set.eq($set.index(this) + 1);
+        $next.focus();
+      }
+    });
+  }
+
+  // live version
+  /**
+   * "Enter" should go to the next input field like tab.
+   */
+  function liveOnEnterAdvanceFocus() {
+    $(".main-table").on("keypress",  "input", function (event) {
+      //console.log("liveOnEnterAdvanceFocus");
+      if (event.keyCode === 13) {
+        // TODO if event.shiftKey, go backwards, wrapping
+        var $set = $('input'),
+            $next = $set.eq($set.index(this) + 1);
         $next.focus();
       }
     });

@@ -36,7 +36,7 @@
           <tbody data-bind='foreach: rows'>
             <tr class="day" data-bind='css:{error: rowTotal() < 0}'>
                 <td><input class='required' 
-                           data-bind='value:timeIn, click:cellClick, event:{blur:cellBlur}'></td>
+                           data-bind='value:timeIn, click:cellClick, event:{blur:cellBlur}, hasFocus:grabFocus'></td>
                 <td><input class='required' 
                            data-bind='value:timeOut, click:cellClick, event:{blur:cellBlur}'></td>
                 <td><input class='number' 
