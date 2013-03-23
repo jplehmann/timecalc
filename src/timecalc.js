@@ -151,8 +151,11 @@ define(["jquery", "knockout", "util", "moment"], function($, ko, util) {
   }
 
   // create model and initialize
-  var viewModel = new TimeSheetModel({callback: function(c) { 
-    ko.applyBindings(c); 
-  }});
+  //var viewModel = new TimeSheetModel({callback: function(c) { 
+  //  ko.applyBindings(c); 
+  //}});
 
+  return {
+    TimeSheetModel: TimeSheetModel
+  }
 });

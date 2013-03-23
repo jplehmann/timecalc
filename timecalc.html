@@ -59,5 +59,40 @@
   </div> <!-- outer-wrapper -->
 
   <script src="lib/require-jquery.js" data-main="src/main"></script>
+  <script>
+    require(["timecalc", "knockout"], function(timecalc, ko) {
+      /** 
+      * Auto-focus on the first input.
+      function focusOnFirst(doSelect) {
+        // the total shows up in HTML before the days so we must
+        // filter the selection
+        var item = $('.day input:visible:first').first().focus();
+        if (doSelect === true) {
+          item.select();
+        }
+      }
+
+      /**
+      * "Enter" should go to the next input field like tab.
+      function onEnterAdvanceFocus() {
+        $("input").bind('keypress', function (event) {
+          if (event.keyCode === 13) {
+            var $set = $('input'),
+            $next = $set.eq($set.index(this) + 1);
+            $next.focus();
+          }
+        });
+      }
+
+      // create model and initialize
+      var viewModel = new TimeSheetModel({callback: function(c) {
+          ko.applyBindings(c); 
+      }});
+      */
+      var viewModel = new timecalc.TimeSheetModel({callback: function(c) { 
+        ko.applyBindings(c);
+      }});
+    });
+  </script>
 </body>
 </html>
