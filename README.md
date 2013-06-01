@@ -2,34 +2,9 @@ TimeCalc
 ========
 A simple timesheet calculator for adding up hours worked.  You can see a live version here: http://timecalc.herokuapp.com
 
-I designed this to have a small app to tinker with JavaScript and related technologies. It incorporates: 
-* [Knockout] and for movel view-viewmodel binding
-* [JQuery] for UI behavior
-* [Bootstrap] for styling
-* [Moment] for time parsing
-* [Require] for modular script loading
-* [Jasmine] for BDD specification tests
-* [Heroku] for hosting using a thin Ruby [Rack] layer
-* [Underscore] for functional constructs
+I designed this to have a small app to tinker with JavaScript and related technologies. 
 
-
-Todo
-----
-
-Features Todo
--------------
-* Dropdown to select rounding options (around at week-end or total)
-* date column on left where user enters first, and rest are inferred?
-* allow entering totals without times?
-* tool tips on headers with help
-* garbage times should not convert ("kjsdf" or "900")
-* should leave break times there, normalized??
-* times like "900"
-* see bugs in issue tracker
-
-Specific Features:
-------------------
-* [Knockout] and for movel view-viewmodel binding
+* [Knockout] and for model view-viewmodel binding
   * typical binding to observables (cells), computed observables (cells) and
     observable arrays (rows)
   * event binding for click button and blur events
@@ -40,13 +15,21 @@ Specific Features:
 * [Require] for modular script loading
 * [Jasmine] for BDD specification tests
 * [Heroku] for hosting using a thin Ruby [Rack] layer
+* [Underscore] for functional constructs
 
-Questions
+Backlog
+-------
+* Dropdown to select rounding options (around at week-end or total)
+* date column on left where user enters first, and rest are inferred?
+* allow entering totals without times?
+* tool tips on headers with help
+* garbage times should not convert ("kjsdf" or "900")
+* should leave break times there, normalized??
+* times like "900"
+* see bugs in issue tracker
+
+Completed
 ---------
-
-
-Stories Complete
------------------
 - conversion to Knockout
 - object oriented
 - should display 5 rows with 3 columns
