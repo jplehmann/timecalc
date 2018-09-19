@@ -67,7 +67,7 @@ first last at geemail dotcom or [@jplehmann]
 [JQuery]: http://jquery.com/
 [Moment]: http://momentjs.com/
 [Bootstrap]: http://twitter.github.com/bootstrap/
-[Jasmine]: http://pivotal.github.com/jasmine/
+[Jasmine]: https://jasmine.github.io/
 [Cucumber]: http://cukes.info/
 [Knockout]: http://knockoutjs.com/
 [Mustache]: https://github.com/janl/mustache.js/
